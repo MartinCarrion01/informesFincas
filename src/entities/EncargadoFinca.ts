@@ -13,6 +13,9 @@ export class EncargadoFinca extends Base {
   @Property()
   numeroEncargadoFinca: String;
 
+  @Property({ default: true })
+  active: Boolean;
+
   @OneToOne(() => Finca, (finca) => finca.encargadoFinca)
   finca!: Finca;
 }

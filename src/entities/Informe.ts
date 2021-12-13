@@ -8,6 +8,7 @@ import {
 import { Base } from "./Base";
 import { Finca } from "./Finca";
 import { InformeComentario } from "./InformeComentario";
+import { User } from "./User";
 import { Variedad } from "./Variedad";
 
 @Entity()
@@ -42,4 +43,10 @@ export class Informe extends Base {
 
   @ManyToOne(() => Variedad)
   variedad: Variedad;
+
+  @ManyToOne(() => User)
+  usuarioRecorredor: User;
+
+  @Property({ default: true })
+  active: boolean;
 }

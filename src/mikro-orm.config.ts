@@ -7,6 +7,9 @@ import { Finca } from "./entities/Finca";
 import { EncargadoFinca } from "./entities/EncargadoFinca";
 import { Productor } from "./entities/Productor";
 import { Variedad } from "./entities/Variedad";
+import { User } from "./entities/User";
+import { UserRole } from "./entities/UserRole";
+import { InformeComentarioEdicion } from "./entities/InformeComentarioEdicion";
 
 export default {
   migrations: {
@@ -25,5 +28,8 @@ export default {
     EncargadoFinca,
     Productor,
     Variedad,
+    User,
+    UserRole,
+    InformeComentarioEdicion,
   ],
 } as Parameters<typeof MikroORM.init>[0];

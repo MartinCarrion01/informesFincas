@@ -10,6 +10,9 @@ export class Variedad extends Base {
   @Property()
   nombreVariedad: String;
 
+  @Property({ default: true })
+  active: Boolean;
+
   @OneToMany({
     entity: () => Informe,
     mappedBy: "variedad",

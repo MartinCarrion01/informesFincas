@@ -24,6 +24,9 @@ export class Finca extends Base {
   @Property()
   coordenadasFinca: String;
 
+  @Property({ default: true })
+  active: Boolean;
+
   @OneToOne({ inversedBy: "finca" })
   encargadoFinca: EncargadoFinca;
 

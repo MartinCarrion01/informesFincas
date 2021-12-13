@@ -1,6 +1,7 @@
-import { Entity, ManyToOne, Property } from "@mikro-orm/core";
+import { Collection, Entity, ManyToOne, OneToMany, Property } from "@mikro-orm/core";
 import { Base } from "./Base";
 import { Informe } from "./Informe";
+import { InformeComentarioEdicion } from "./InformeComentarioEdicion";
 
 @Entity()
 export class InformeComentario extends Base {
@@ -12,4 +13,11 @@ export class InformeComentario extends Base {
 
   @ManyToOne(() => Informe)
   informe: Informe;
+
+  @OneToMany({
+    entity: () => InformeComentarioEdicion,
+    mappedBy: "informeComentario",
+    orphanRemoval: true,
+  })
+  informeComentarioEdiciones = new Collection<InformeComentarioEdicion>(this);
 }

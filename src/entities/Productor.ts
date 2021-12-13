@@ -10,6 +10,9 @@ export class Productor extends Base {
   @Property()
   nombreProductor: String;
 
+  @Property({ default: true })
+  active: Boolean;
+
   @OneToMany({
     entity: () => Finca,
     mappedBy: "productor",
