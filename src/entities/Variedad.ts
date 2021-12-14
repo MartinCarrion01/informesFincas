@@ -7,7 +7,7 @@ export class Variedad extends Base {
   @Property({ unique: true })
   codVariedad: number;
 
-  @Property()
+  @Property({ unique: true })
   nombreVariedad: String;
 
   @Property({ default: true })

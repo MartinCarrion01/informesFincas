@@ -5,11 +5,15 @@ import { DI } from "../../index";
 const variedadRouter = express.Router();
 
 variedadRouter.get("/variedad", async (_req: Request, res: Response) => {
-  const variedades = await DI.em.find(Variedad, {});
-  if (variedades.length !== 0) {
-    res.json(variedades);
-  } else {
-    res.status(404).json({ mensaje: "no se encontraron variedades" });
+  try {
+    const variedades = await DI.em.find(Variedad, {});
+    if (variedades.length !== 0) {
+      res.status(200).json(variedades);
+    } else {
+      res.status(404).json({ mensaje: "no se encontraron variedades" });
+    }
+  } catch (error) {
+    return res.status(400).json({ error });
   }
 });
 
@@ -25,7 +29,7 @@ variedadRouter.post("/variedad", async (req: Request, res: Response) => {
   try {
     const variedad = DI.em.create(Variedad, {
       nombreVariedad: body.nombreVariedad,
-      codVariedad: await DI.em.count(Variedad, {}),
+      codVariedad: body.codVariedad,
     });
     await DI.em.persistAndFlush(variedad);
     return res.status(201).json(variedad);

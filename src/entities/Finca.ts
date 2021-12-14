@@ -27,7 +27,9 @@ export class Finca extends Base {
   @Property({ default: true })
   active: Boolean;
 
-  @OneToOne({ inversedBy: "finca" })
+  @OneToOne(() => EncargadoFinca, (encargadoFinca) => encargadoFinca.finca, {
+    owner: true,
+  })
   encargadoFinca: EncargadoFinca;
 
   @ManyToOne(() => Productor)

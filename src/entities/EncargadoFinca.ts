@@ -10,7 +10,7 @@ export class EncargadoFinca extends Base {
   @Property()
   nombreEncargadoFinca: String;
 
-  @Property()
+  @Property({unique: true})
   numeroEncargadoFinca: String;
 
   @Property({ default: true })

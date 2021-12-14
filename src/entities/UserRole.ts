@@ -8,7 +8,7 @@ export class UserRole extends Base {
   nombreUserRole: String;
 
   @Property({ default: true })
-  active: true;
+  active: boolean;
 
   @OneToMany({
     entity: () => User,

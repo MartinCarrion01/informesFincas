@@ -7,7 +7,7 @@ export class Productor extends Base {
   @Property({ unique: true })
   codProductor: number;
 
-  @Property()
+  @Property({unique: true})
   nombreProductor: String;
 
   @Property({ default: true })
