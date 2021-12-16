@@ -1,4 +1,4 @@
-import { EntityManager } from "@mikro-orm/core";
+import { EntityManager } from "typeorm";
 import { Productor } from "../../entities/Productor";
 
 export class ProductorTestHelper {
@@ -18,7 +18,7 @@ export class ProductorTestHelper {
     const productor = await this.em.findOne(Productor, { codProductor: 3 });
     if (productor) {
       productor.active = false;
-      await this.em.persistAndFlush(productor);
+      await this.em.save(productor);
     }
   }
   async productorAtDb() {

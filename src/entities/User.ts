@@ -1,4 +1,4 @@
-import { Collection, Entity, ManyToOne, OneToMany, Property } from "@mikro-orm/core";
+import { Column, Entity, ManyToOne, OneToMany } from "typeorm";
 import { Base } from "./Base";
 import { Informe } from "./Informe";
 import { InformeComentarioEdicion } from "./InformeComentarioEdicion";
@@ -6,41 +6,36 @@ import { UserRole } from "./UserRole";
 
 @Entity()
 export class User extends Base {
-  @Property({ unique: true })
+  @Column({ unique: true })
   dniUsuario: number;
 
-  @Property()
+  @Column()
   nombreUsuario: String;
 
-  @Property()
+  @Column()
   apellidoUsuario: String;
 
-  @Property({ unique: true })
+  @Column({ unique: true })
   legajoUsuario: String;
 
-  @Property({ type: "date" })
+  @Column({ type: "date" })
   fechaAltaUsuario = new Date();
 
-  @Property({ default: true })
+  @Column({ default: true })
   active: boolean;
 
-  @Property({ type: "text" })
+  @Column({ type: "text" })
   password: string;
 
-  @ManyToOne(() => UserRole)
+  @ManyToOne(() => UserRole, (userRole) => userRole.usersByRole)
   rol: UserRole;
 
-  @OneToMany({
-    entity: () => InformeComentarioEdicion,
-    mappedBy: "usuarioEditor",
-    orphanRemoval: true,
-  })
-  informeComentarioEdiciones = new Collection<InformeComentarioEdicion>(this);
+  @OneToMany(
+    () => InformeComentarioEdicion,
+    (informeComentarioEdicion) => informeComentarioEdicion.informeComentario
+  )
+  informeComentarioEdiciones: InformeComentarioEdicion[];
 
-  @OneToMany({
-    entity: () => Informe,
-    mappedBy: "usuarioRecorredor",
-    orphanRemoval: true,
-  })
-  informes = new Collection<Informe>(this);
+  @OneToMany(() => Informe, informe => informe.usuarioRecorredor)
+  informes: Informe[];
 }

@@ -2,36 +2,32 @@ import { Express } from "express-serve-static-core";
 import { Variedad } from "../../entities/Variedad";
 import supertest, { SuperTest } from "supertest";
 import { createServer } from "../../utils/server";
-import { connect } from "../commontesthelper";
 import { VariedadTestHelper } from "./variedadTestHelper";
+import { getManager } from "typeorm";
 
 let app: Express;
 let variedadTestHelper: VariedadTestHelper;
 let api: SuperTest<supertest.Test>;
 
 beforeAll(async () => {
-  jest.setTimeout(30000);
   try {
-    const di = await connect();
-    app = createServer(di.em);
+    app = await createServer();
     api = supertest(app);
-    variedadTestHelper = new VariedadTestHelper(di.em);
+    variedadTestHelper = new VariedadTestHelper(getManager());
   } catch (error) {
     console.log(error);
   }
-});
+}, 3000000);
 
 beforeEach(async () => {
-  await variedadTestHelper.em.nativeDelete(Variedad, {});
+  await variedadTestHelper.em.delete(Variedad, {});
   variedadTestHelper.initVariedades();
-  await variedadTestHelper.em.persistAndFlush(
-    variedadTestHelper.variedadesIniciales
-  );
+  await variedadTestHelper.em.save(variedadTestHelper.variedadesIniciales);
 });
 
 describe("recuperar todas las variedades", () => {
   test("si no hay nada, se devuelve un 404", async () => {
-    await variedadTestHelper.em.nativeDelete(Variedad, {});
+    await variedadTestHelper.em.delete(Variedad, {});
     const res = await api.get("/admin/variedad").expect(404);
     expect(res.body).toStrictEqual({ mensaje: "no se encontraron variedades" });
   });
@@ -157,5 +153,3 @@ describe("una variedad es dada de baja", () => {
       .expect(204);
   });
 });
-
-

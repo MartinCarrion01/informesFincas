@@ -1,12 +1,12 @@
 import express, { Request, Response } from "express";
+import { getManager } from "typeorm";
 import { UserRole } from "../../entities/UserRole";
-import { DI } from "../../index";
 
 const userRoleRouter = express.Router();
 
 userRoleRouter.get("/userrole", async (_req: Request, res: Response) => {
   try {
-    const userRoles = await DI.em.find(UserRole, {});
+    const userRoles = await getManager().find(UserRole, {});
     if (userRoles.length !== 0) {
       res.status(200).json(userRoles);
     } else {
@@ -27,10 +27,10 @@ userRoleRouter.post("/userrole", async (req: Request, res: Response) => {
   }
 
   try {
-    const userRole = DI.em.create(UserRole, {
+    const userRole = getManager().create(UserRole, {
       nombreUserRole: body.nombreUserRole,
     });
-    await DI.em.persistAndFlush(userRole);
+    await getManager().save(userRole);
     return res.status(201).json(userRole);
   } catch (err) {
     return res.status(400).json({ error: err });
@@ -48,7 +48,7 @@ userRoleRouter.put("/userrole/:id", async (req: Request, res: Response) => {
   }
 
   try {
-    const userRole = await DI.em.findOne(UserRole, {
+    const userRole = await getManager().findOne(UserRole, {
       uuid: idUserRole,
     });
     if (!userRole) {
@@ -62,7 +62,7 @@ userRoleRouter.put("/userrole/:id", async (req: Request, res: Response) => {
         .json({ error: "El rol de usuario especificado no es vigente" });
     }
     userRole.nombreUserRole = body.nombreUserRole;
-    await DI.em.persistAndFlush(userRole);
+    await getManager().save(userRole);
     return res.status(200).json(userRole);
   } catch (error) {
     return res.status(400).json({ error });
@@ -72,7 +72,7 @@ userRoleRouter.put("/userrole/:id", async (req: Request, res: Response) => {
 userRoleRouter.delete("/userrole/:id", async (req: Request, res: Response) => {
   const idUserRole = req.params.id;
   try {
-    const userRole = await DI.em.findOne(UserRole, {
+    const userRole = await getManager().findOne(UserRole, {
       uuid: idUserRole,
     });
     if (!userRole) {
@@ -86,7 +86,7 @@ userRoleRouter.delete("/userrole/:id", async (req: Request, res: Response) => {
         .json({ error: "El rol de usuario especificado no es vigente" });
     }
     userRole.active = false;
-    await DI.em.persistAndFlush(userRole);
+    await getManager().save(userRole);
     return res.status(204).json({
       mensaje: `El rol de usuario ${userRole.nombreUserRole} fue eliminado exitosamente`,
     });

@@ -2,36 +2,34 @@ import { Express } from "express-serve-static-core";
 import { UserRole } from "../../entities/UserRole";
 import supertest, { SuperTest } from "supertest";
 import { createServer } from "../../utils/server";
-import { connect } from "../commontesthelper";
 import { UserRoleTestHelper } from "./userRoleTestHelper";
+import { getManager } from "typeorm";
 
 let app: Express;
 let userRoleTestHelper: UserRoleTestHelper;
 let api: SuperTest<supertest.Test>;
 
 beforeAll(async () => {
-  jest.setTimeout(30000);
   try {
-    const di = await connect();
-    app = createServer(di.em);
+    app = await createServer();
     api = supertest(app);
-    userRoleTestHelper = new UserRoleTestHelper(di.em);
+    userRoleTestHelper = new UserRoleTestHelper(getManager());
   } catch (error) {
     console.log(error);
   }
-});
+}, 3000000);
 
 beforeEach(async () => {
-  await userRoleTestHelper.em.nativeDelete(UserRole, {});
+  await userRoleTestHelper.em.delete(UserRole, {});
   userRoleTestHelper.initUserRoles();
-  await userRoleTestHelper.em.persistAndFlush(
+  await userRoleTestHelper.em.save(
     userRoleTestHelper.UserRolesIniciales
   );
 });
 
 describe("recuperar todas los UserRoles", () => {
   test("si no hay nada, se devuelve un 404", async () => {
-    await userRoleTestHelper.em.nativeDelete(UserRole, {});
+    await userRoleTestHelper.em.delete(UserRole, {});
     const res = await api.get("/admin/userrole").expect(404);
     expect(res.body).toStrictEqual({
       mensaje: "no se encontraron roles de usuario",

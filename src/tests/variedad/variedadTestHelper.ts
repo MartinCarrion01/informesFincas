@@ -1,4 +1,4 @@
-import { EntityManager } from "@mikro-orm/core";
+import { EntityManager } from "typeorm";
 import { Variedad } from "../../entities/Variedad";
 
 export class VariedadTestHelper {
@@ -18,7 +18,7 @@ export class VariedadTestHelper {
     const variedad = await this.em.findOne(Variedad, { codVariedad: 3 });
     if (variedad) {
       variedad.active = false;
-      await this.em.persistAndFlush(variedad);
+      await this.em.save(variedad);
     }
   }
   async variedadAtDb() {

@@ -1,22 +1,22 @@
-import { Collection, Entity, OneToMany, Property } from "@mikro-orm/core";
+import { Column, Entity, ManyToMany, OneToMany } from "typeorm";
 import { Base } from "./Base";
+import { Finca } from "./Finca";
 import { Informe } from "./Informe";
 
 @Entity()
 export class Variedad extends Base {
-  @Property({ unique: true })
+  @Column({ unique: true })
   codVariedad: number;
 
-  @Property({ unique: true })
+  @Column({ unique: true })
   nombreVariedad: String;
 
-  @Property({ default: true })
+  @Column({ default: true })
   active: Boolean;
 
-  @OneToMany({
-    entity: () => Informe,
-    mappedBy: "variedad",
-    orphanRemoval: true,
-  })
-  informes = new Collection<Informe>(this);
+  @OneToMany(() => Informe, (informe) => informe.variedad)
+  informes: Informe[];
+
+  @ManyToMany(() => Finca, (finca) => finca.variedades)
+  fincas: Finca[];
 }

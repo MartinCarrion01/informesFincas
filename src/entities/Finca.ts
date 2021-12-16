@@ -1,12 +1,13 @@
 import {
+  Column,
   Entity,
-  Property,
-  OneToOne,
-  ManyToOne,
-  Collection,
+  JoinColumn,
+  JoinTable,
   ManyToMany,
+  ManyToOne,
   OneToMany,
-} from "@mikro-orm/core";
+  OneToOne,
+} from "typeorm";
 import { Base } from "./Base";
 import { EncargadoFinca } from "./EncargadoFinca";
 import { Informe } from "./Informe";
@@ -15,33 +16,29 @@ import { Variedad } from "./Variedad";
 
 @Entity()
 export class Finca extends Base {
-  @Property({ unique: true })
+  @Column({ unique: true })
   codFinca: number;
 
-  @Property()
+  @Column()
   nombreFinca: String;
 
-  @Property()
+  @Column()
   coordenadasFinca: String;
 
-  @Property({ default: true })
+  @Column({ default: true })
   active: Boolean;
 
-  @OneToOne(() => EncargadoFinca, (encargadoFinca) => encargadoFinca.finca, {
-    owner: true,
-  })
+  @OneToOne(() => EncargadoFinca, (encargadoFinca) => encargadoFinca.finca)
+  @JoinColumn()
   encargadoFinca: EncargadoFinca;
 
-  @ManyToOne(() => Productor)
+  @ManyToOne(() => Productor, (productor) => productor.fincas)
   productor: Productor;
 
-  @ManyToMany(() => Variedad)
-  variedades: Collection<Variedad> = new Collection<Variedad>(this);
+  @ManyToMany(() => Variedad, (variedad) => variedad.fincas)
+  @JoinTable()
+  variedades: Variedad[];
 
-  @OneToMany({
-    entity: () => Informe,
-    mappedBy: "finca",
-    orphanRemoval: true,
-  })
-  informes = new Collection<Informe>(this);
+  @OneToMany(() => Informe, (informe) => informe.finca)
+  informes: Informe[];
 }

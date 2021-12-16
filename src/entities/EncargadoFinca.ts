@@ -1,19 +1,19 @@
-import { Entity, OneToOne, Property } from "@mikro-orm/core";
+import { Column, Entity, OneToOne } from "typeorm";
 import { Base } from "./Base";
 import { Finca } from "./Finca";
 
 @Entity()
 export class EncargadoFinca extends Base {
-  @Property({ unique: true })
+  @Column({ unique: true })
   codEncargadoFinca: number;
 
-  @Property()
+  @Column()
   nombreEncargadoFinca: String;
 
-  @Property({unique: true})
+  @Column({unique: true})
   numeroEncargadoFinca: String;
 
-  @Property({ default: true })
+  @Column({ default: true })
   active: Boolean;
 
   @OneToOne(() => Finca, (finca) => finca.encargadoFinca)

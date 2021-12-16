@@ -1,19 +1,15 @@
-import { Collection, Entity, OneToMany, Property } from "@mikro-orm/core";
+import { Column, Entity, OneToMany } from "typeorm";
 import { Base } from "./Base";
 import { User } from "./User";
 
 @Entity()
 export class UserRole extends Base {
-  @Property()
+  @Column()
   nombreUserRole: String;
 
-  @Property({ default: true })
+  @Column({ default: true })
   active: boolean;
 
-  @OneToMany({
-    entity: () => User,
-    mappedBy: "rol",
-    orphanRemoval: true,
-  })
-  usersByRole = new Collection<User>(this);
+  @OneToMany(() => User, (user) => user.rol)
+  usersByRole: User[];
 }

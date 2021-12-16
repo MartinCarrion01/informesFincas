@@ -1,4 +1,4 @@
-import { EntityManager } from "@mikro-orm/core";
+import { EntityManager } from "typeorm";
 import { EncargadoFinca } from "../../entities/EncargadoFinca";
 
 export class EncargadoFincaTestHelper {
@@ -32,7 +32,7 @@ export class EncargadoFincaTestHelper {
     });
     if (encargadoFinca) {
       encargadoFinca.active = false;
-      await this.em.persistAndFlush(encargadoFinca);
+      await this.em.save(encargadoFinca);
     }
   }
   async encargadoFincaAtDb() {

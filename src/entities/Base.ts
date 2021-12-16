@@ -1,7 +1,6 @@
-import { PrimaryKey } from "@mikro-orm/core";
-import { v4 } from "uuid";
+import { PrimaryGeneratedColumn } from "typeorm";
 
 export abstract class Base {
-  @PrimaryKey()
-  uuid: string = v4();
+  @PrimaryGeneratedColumn("uuid")
+  uuid: String;
 }

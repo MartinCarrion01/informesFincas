@@ -2,36 +2,34 @@ import { Express } from "express-serve-static-core";
 import { Productor} from "../../entities/Productor";
 import supertest, { SuperTest } from "supertest";
 import { createServer } from "../../utils/server";
-import { connect } from "../commontesthelper";
 import { ProductorTestHelper } from "./productorTestHelper";
+import { getManager } from "typeorm";
 
 let app: Express;
 let productorTestHelper: ProductorTestHelper;
 let api: SuperTest<supertest.Test>;
 
 beforeAll(async () => {
-  jest.setTimeout(30000);
   try {
-    const di = await connect();
-    app = createServer(di.em);
+    app = await createServer();
     api = supertest(app);
-    productorTestHelper = new ProductorTestHelper(di.em);
+    productorTestHelper = new ProductorTestHelper(getManager());
   } catch (error) {
     console.log(error);
   }
-});
+}, 3000000);
 
 beforeEach(async () => {
-  await productorTestHelper.em.nativeDelete(Productor, {});
+  await productorTestHelper.em.delete(Productor, {});
   productorTestHelper.initProductores();
-  await productorTestHelper.em.persistAndFlush(
+  await productorTestHelper.em.save(
     productorTestHelper.productoresIniciales
   );
 });
 
 describe("recuperar todas las productores", () => {
   test("si no hay nada, se devuelve un 404", async () => {
-    await productorTestHelper.em.nativeDelete(Productor, {});
+    await productorTestHelper.em.delete(Productor, {});
     const res = await api.get("/admin/productor").expect(404);
     expect(res.body).toStrictEqual({ mensaje: "no se encontraron Productores" });
   });

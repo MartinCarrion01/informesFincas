@@ -1,12 +1,12 @@
 import express, { Request, Response } from "express";
+import { getManager } from "typeorm";
 import { Variedad } from "../../entities/Variedad";
-import { DI } from "../../index";
 
 const variedadRouter = express.Router();
 
 variedadRouter.get("/variedad", async (_req: Request, res: Response) => {
   try {
-    const variedades = await DI.em.find(Variedad, {});
+    const variedades = await getManager().find(Variedad, {});
     if (variedades.length !== 0) {
       res.status(200).json(variedades);
     } else {
@@ -27,11 +27,11 @@ variedadRouter.post("/variedad", async (req: Request, res: Response) => {
   }
 
   try {
-    const variedad = DI.em.create(Variedad, {
+    const variedad = getManager().create(Variedad, {
       nombreVariedad: body.nombreVariedad,
       codVariedad: body.codVariedad,
     });
-    await DI.em.persistAndFlush(variedad);
+    await getManager().save(variedad);
     return res.status(201).json(variedad);
   } catch (err) {
     return res.status(400).json({ error: err });
@@ -49,7 +49,7 @@ variedadRouter.put("/variedad/:id", async (req: Request, res: Response) => {
   }
 
   try {
-    const variedad = await DI.em.findOne(Variedad, {
+    const variedad = await getManager().findOne(Variedad, {
       uuid: idVariedad,
     });
     if (!variedad) {
@@ -63,7 +63,7 @@ variedadRouter.put("/variedad/:id", async (req: Request, res: Response) => {
         .json({ error: "La variedad especificada no es vigente" });
     }
     variedad.nombreVariedad = body.nombreVariedad;
-    await DI.em.persistAndFlush(variedad);
+    await getManager().save(variedad);
     return res.status(200).json(variedad);
   } catch (error) {
     return res.status(400).json({ error });
@@ -73,7 +73,7 @@ variedadRouter.put("/variedad/:id", async (req: Request, res: Response) => {
 variedadRouter.delete("/variedad/:id", async (req: Request, res: Response) => {
   const idVariedad = req.params.id;
   try {
-    const variedad = await DI.em.findOne(Variedad, {
+    const variedad = await getManager().findOne(Variedad, {
       uuid: idVariedad,
     });
     if (!variedad) {
@@ -87,7 +87,7 @@ variedadRouter.delete("/variedad/:id", async (req: Request, res: Response) => {
         .json({ error: "La variedad especificada no es vigente" });
     }
     variedad.active = false;
-    await DI.em.persistAndFlush(variedad);
+    await getManager().save(variedad);
     return res.status(204).json({
       mensaje: `La variedad ${variedad.nombreVariedad} fue eliminada exitosamente`,
     });

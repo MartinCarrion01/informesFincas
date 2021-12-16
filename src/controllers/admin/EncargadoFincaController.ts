@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import { EncargadoFinca } from "../../entities/EncargadoFinca";
-import { DI } from "../../index";
+import { getManager } from "typeorm";
 
 const encargadoFincaRouter = express.Router();
 
@@ -8,7 +8,7 @@ encargadoFincaRouter.get(
   "/encargadofinca",
   async (_req: Request, res: Response) => {
     try {
-      const encargadosFinca = await DI.em.find(EncargadoFinca, {});
+      const encargadosFinca = await getManager().find(EncargadoFinca, {});
       if (encargadosFinca.length !== 0) {
         res.status(200).json(encargadosFinca);
       } else {
@@ -47,12 +47,12 @@ encargadoFincaRouter.post(
       }
     }
     try {
-      const encargadoFinca = DI.em.create(EncargadoFinca, {
+      const encargadoFinca = getManager().create(EncargadoFinca, {
         nombreEncargadoFinca: body.nombreEncargadoFinca,
         numeroEncargadoFinca: body.numeroEncargadoFinca,
         codEncargadoFinca: body.codEncargadoFinca,
       });
-      await DI.em.persistAndFlush(encargadoFinca);
+      await getManager().save(encargadoFinca);
       return res.status(201).json(encargadoFinca);
     } catch (err) {
       return res.status(400).json({ error: err });
@@ -87,7 +87,7 @@ encargadoFincaRouter.put(
     }
 
     try {
-      const encargadoFinca = await DI.em.findOne(EncargadoFinca, {
+      const encargadoFinca = await getManager().findOne(EncargadoFinca, {
         uuid: idEncargadoFinca,
       });
       if (!encargadoFinca) {
@@ -102,7 +102,7 @@ encargadoFincaRouter.put(
       }
       encargadoFinca.nombreEncargadoFinca = body.nombreEncargadoFinca;
       encargadoFinca.numeroEncargadoFinca = body.numeroEncargadoFinca;
-      await DI.em.persistAndFlush(encargadoFinca);
+      await getManager().save(encargadoFinca);
       return res.status(200).json(encargadoFinca);
     } catch (error) {
       return res.status(400).json({ error });
@@ -115,7 +115,7 @@ encargadoFincaRouter.delete(
   async (req: Request, res: Response) => {
     const idEncargadoFinca = req.params.id;
     try {
-      const encargadoFinca = await DI.em.findOne(EncargadoFinca, {
+      const encargadoFinca = await getManager().findOne(EncargadoFinca, {
         uuid: idEncargadoFinca,
       });
       if (!encargadoFinca) {
@@ -129,7 +129,7 @@ encargadoFincaRouter.delete(
           .json({ error: "El encargadoFinca especificado no es vigente" });
       }
       encargadoFinca.active = false;
-      await DI.em.persistAndFlush(encargadoFinca);
+      await getManager().save(encargadoFinca);
       return res.status(204).json({
         mensaje: `El encargadoFinca ${encargadoFinca.nombreEncargadoFinca} fue eliminado exitosamente`,
       });

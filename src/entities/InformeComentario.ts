@@ -1,23 +1,22 @@
-import { Collection, Entity, ManyToOne, OneToMany, Property } from "@mikro-orm/core";
+import { Column, Entity, ManyToOne, OneToMany } from "typeorm";
 import { Base } from "./Base";
 import { Informe } from "./Informe";
 import { InformeComentarioEdicion } from "./InformeComentarioEdicion";
 
 @Entity()
 export class InformeComentario extends Base {
-  @Property({ type: "date" })
+  @Column({ type: "date" })
   fechaIngresoInforme = new Date();
 
-  @Property({ length: 300 })
+  @Column({ length: 300 })
   descripcion: String;
 
-  @ManyToOne(() => Informe)
+  @ManyToOne(() => Informe, (informe) => informe.informeComentarios)
   informe: Informe;
 
-  @OneToMany({
-    entity: () => InformeComentarioEdicion,
-    mappedBy: "informeComentario",
-    orphanRemoval: true,
-  })
-  informeComentarioEdiciones = new Collection<InformeComentarioEdicion>(this);
+  @OneToMany(
+    () => InformeComentarioEdicion,
+    (informeComentarioEdicion) => informeComentarioEdicion.informeComentario
+  )
+  informeComentarioEdiciones: InformeComentarioEdicion[];
 }

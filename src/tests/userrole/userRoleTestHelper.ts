@@ -1,4 +1,4 @@
-import { EntityManager } from "@mikro-orm/core";
+import { EntityManager } from "typeorm";
 import { UserRole } from "../../entities/UserRole";
 
 export class UserRoleTestHelper {
@@ -20,7 +20,7 @@ export class UserRoleTestHelper {
     });
     if (userRole) {
       userRole.active = false;
-      await this.em.persistAndFlush(userRole);
+      await this.em.save(userRole);
     }
   }
   async userRoleAtDb() {

@@ -1,10 +1,4 @@
-import {
-  Entity,
-  Property,
-  OneToMany,
-  Collection,
-  ManyToOne,
-} from "@mikro-orm/core";
+import { Column, Entity, ManyToOne, OneToMany } from "typeorm";
 import { Base } from "./Base";
 import { Finca } from "./Finca";
 import { InformeComentario } from "./InformeComentario";
@@ -13,40 +7,39 @@ import { Variedad } from "./Variedad";
 
 @Entity()
 export class Informe extends Base {
-  @Property({ unique: true })
+  @Column({ unique: true })
   codInforme: number;
 
-  @Property({ type: "date" })
+  @Column({ type: "date" })
   fechaIngresoInforme = new Date();
 
-  @Property()
+  @Column()
   cantKgEstimadoCosecha: number;
 
-  @Property({ type: "date" })
+  @Column({ type: "date" })
   fechaEstimadaCosecha: Date;
 
-  @Property({ nullable: true })
+  @Column({ nullable: true })
   cantKgRealCosecha: number;
 
-  @Property({ type: "date", nullable: true })
+  @Column({ type: "date", nullable: true })
   fechaRealCosecha: Date;
 
-  @OneToMany({
-    entity: () => InformeComentario,
-    mappedBy: "informe",
-    orphanRemoval: true,
-  })
-  informeComentarios = new Collection<InformeComentario>(this);
+  @OneToMany(
+    () => InformeComentario,
+    (informeComentario) => informeComentario.informe
+  )
+  informeComentarios: InformeComentario[];
 
-  @ManyToOne(() => Finca)
+  @ManyToOne(() => Finca, (finca) => finca.informes)
   finca: Finca;
 
-  @ManyToOne(() => Variedad)
+  @ManyToOne(() => Variedad, (variedad) => variedad.fincas)
   variedad: Variedad;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, (user) => user.informes)
   usuarioRecorredor: User;
 
-  @Property({ default: true })
+  @Column({ default: true })
   active: boolean;
 }

@@ -1,22 +1,25 @@
-import { Entity, ManyToOne, Property } from "@mikro-orm/core";
+import { Column, Entity, ManyToOne } from "typeorm";
 import { Base } from "./Base";
 import { InformeComentario } from "./InformeComentario";
 import { User } from "./User";
 
 @Entity()
 export class InformeComentarioEdicion extends Base {
-  @Property({ type: "date" })
+  @Column({ type: "date" })
   fechaEdicion = new Date();
 
-  @Property({ length: 300 })
+  @Column({ length: 300 })
   descripcionPrevia: String;
 
-  @Property({ length: 300 })
+  @Column({ length: 300 })
   descripcionNueva: String;
 
-  @ManyToOne(() => InformeComentario)
+  @ManyToOne(
+    () => InformeComentario,
+    (informeComentario) => informeComentario.informeComentarioEdiciones
+  )
   informeComentario: InformeComentario;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, (user) => user.informeComentarioEdiciones)
   usuarioEditor: User;
 }

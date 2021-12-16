@@ -2,36 +2,34 @@ import { Express } from "express-serve-static-core";
 import { EncargadoFinca } from "../../entities/EncargadoFinca";
 import supertest, { SuperTest } from "supertest";
 import { createServer } from "../../utils/server";
-import { connect } from "../commontesthelper";
 import { EncargadoFincaTestHelper } from "./encargadoFincaTestHelper";
+import { getManager } from "typeorm";
 
 let app: Express;
 let encargadoFincaTestHelper: EncargadoFincaTestHelper;
 let api: SuperTest<supertest.Test>;
 
 beforeAll(async () => {
-  jest.setTimeout(50000);
   try {
-    const di = await connect();
-    app = createServer(di.em);
+    app = await createServer();
     api = supertest(app);
-    encargadoFincaTestHelper = new EncargadoFincaTestHelper(di.em);
+    encargadoFincaTestHelper = new EncargadoFincaTestHelper(getManager());
   } catch (error) {
     console.log(error);
   }
-});
+}, 3000000);
 
 beforeEach(async () => {
-  await encargadoFincaTestHelper.em.nativeDelete(EncargadoFinca, {});
+  await encargadoFincaTestHelper.em.delete(EncargadoFinca, {});
   encargadoFincaTestHelper.initEncargadosFinca();
-  await encargadoFincaTestHelper.em.persistAndFlush(
+  await encargadoFincaTestHelper.em.save(
     encargadoFincaTestHelper.encargadosFincaIniciales
   );
 });
 
 describe("recuperar todas las encargadosFinca", () => {
   test("si no hay nada, se devuelve un 404", async () => {
-    await encargadoFincaTestHelper.em.nativeDelete(EncargadoFinca, {});
+    await encargadoFincaTestHelper.em.delete(EncargadoFinca, {});
     const res = await api.get("/admin/encargadofinca").expect(404);
     expect(res.body).toStrictEqual({
       mensaje: "no se encontraron encargados de finca",
