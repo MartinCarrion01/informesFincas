@@ -7,9 +7,6 @@ export class UserRole extends Base {
   @Column()
   nombreUserRole: String;
 
-  @Column({ default: true })
-  active: boolean;
-
   @OneToMany(() => User, (user) => user.rol)
   usersByRole: User[];
 }

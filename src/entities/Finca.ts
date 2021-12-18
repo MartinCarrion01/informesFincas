@@ -22,11 +22,8 @@ export class Finca extends Base {
   @Column()
   nombreFinca: String;
 
-  @Column()
+  @Column({ unique: true })
   coordenadasFinca: String;
-
-  @Column({ default: true })
-  active: Boolean;
 
   @OneToOne(() => EncargadoFinca, (encargadoFinca) => encargadoFinca.finca)
   @JoinColumn()

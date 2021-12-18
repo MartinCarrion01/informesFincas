@@ -5,9 +5,6 @@ import { InformeComentarioEdicion } from "./InformeComentarioEdicion";
 
 @Entity()
 export class InformeComentario extends Base {
-  @Column({ type: "date" })
-  fechaIngresoInforme = new Date();
-
   @Column({ length: 300 })
   descripcion: String;
 
@@ -16,7 +13,8 @@ export class InformeComentario extends Base {
 
   @OneToMany(
     () => InformeComentarioEdicion,
-    (informeComentarioEdicion) => informeComentarioEdicion.informeComentario
+    (informeComentarioEdicion) => informeComentarioEdicion.informeComentario,
+    { cascade: true }
   )
   informeComentarioEdiciones: InformeComentarioEdicion[];
 }

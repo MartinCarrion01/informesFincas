@@ -6,7 +6,7 @@ import { UserRole } from "./UserRole";
 
 @Entity()
 export class User extends Base {
-  @Column({ unique: true })
+  @Column()
   dniUsuario: number;
 
   @Column()
@@ -15,14 +15,8 @@ export class User extends Base {
   @Column()
   apellidoUsuario: String;
 
-  @Column({ unique: true })
+  @Column()
   legajoUsuario: String;
-
-  @Column({ type: "date" })
-  fechaAltaUsuario = new Date();
-
-  @Column({ default: true })
-  active: boolean;
 
   @Column({ type: "text" })
   password: string;

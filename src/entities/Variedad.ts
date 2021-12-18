@@ -11,9 +11,6 @@ export class Variedad extends Base {
   @Column({ unique: true })
   nombreVariedad: String;
 
-  @Column({ default: true })
-  active: Boolean;
-
   @OneToMany(() => Informe, (informe) => informe.variedad)
   informes: Informe[];
 

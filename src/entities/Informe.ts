@@ -2,6 +2,7 @@ import { Column, Entity, ManyToOne, OneToMany } from "typeorm";
 import { Base } from "./Base";
 import { Finca } from "./Finca";
 import { InformeComentario } from "./InformeComentario";
+import { InformeCosechaEstimada } from "./InformeCosechaEstimada";
 import { User } from "./User";
 import { Variedad } from "./Variedad";
 
@@ -10,14 +11,8 @@ export class Informe extends Base {
   @Column({ unique: true })
   codInforme: number;
 
-  @Column({ type: "date" })
-  fechaIngresoInforme = new Date();
-
   @Column()
-  cantKgEstimadoCosecha: number;
-
-  @Column({ type: "date" })
-  fechaEstimadaCosecha: Date;
+  informeTitulo: string;
 
   @Column({ nullable: true })
   cantKgRealCosecha: number;
@@ -27,7 +22,8 @@ export class Informe extends Base {
 
   @OneToMany(
     () => InformeComentario,
-    (informeComentario) => informeComentario.informe
+    (informeComentario) => informeComentario.informe,
+    { cascade: true }
   )
   informeComentarios: InformeComentario[];
 
@@ -40,6 +36,10 @@ export class Informe extends Base {
   @ManyToOne(() => User, (user) => user.informes)
   usuarioRecorredor: User;
 
-  @Column({ default: true })
-  active: boolean;
+  @OneToMany(
+    () => InformeCosechaEstimada,
+    (informeCosechaEstimada) => informeCosechaEstimada.informe,
+    { cascade: true }
+  )
+  informeCosechasEstimadas: InformeCosechaEstimada[];
 }

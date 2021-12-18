@@ -5,8 +5,6 @@ import { User } from "./User";
 
 @Entity()
 export class InformeComentarioEdicion extends Base {
-  @Column({ type: "date" })
-  fechaEdicion = new Date();
 
   @Column({ length: 300 })
   descripcionPrevia: String;

@@ -19,7 +19,6 @@ export class FincaTestHelper {
     await this.initVariedades();
     this.fincasIniciales = [
       this.em.create(Finca, {
-        codFinca: 1,
         nombreFinca: "fin1",
         coordenadasFinca: "coord1",
         encargadoFinca: this.encargadosFincaIniciales[0],
@@ -27,12 +26,11 @@ export class FincaTestHelper {
         variedades: this.variedadesIniciales,
       }),
       this.em.create(Finca, {
-        codFinca: 2,
         nombreFinca: "fin2",
         coordenadasFinca: "coord2",
         encargadoFinca: this.encargadosFincaIniciales[1],
         productor: this.productoresIniciales[1],
-        variedades: this.variedadesIniciales
+        variedades: this.variedadesIniciales,
       }),
     ];
   }
@@ -42,6 +40,7 @@ export class FincaTestHelper {
       this.em.create(Productor, { nombreProductor: "prod2", codProductor: 2 }),
     ];
     await this.em.save(this.productoresIniciales);
+    console.log("guardo prod");
   }
   async initEncargadosFinca() {
     this.encargadosFincaIniciales = [
@@ -57,6 +56,7 @@ export class FincaTestHelper {
       }),
     ];
     await this.em.save(this.encargadosFincaIniciales);
+    console.log("guardo enc");
   }
   async initVariedades() {
     this.variedadesIniciales = [
@@ -64,6 +64,7 @@ export class FincaTestHelper {
       this.em.create(Variedad, { nombreVariedad: "var2", codVariedad: 2 }),
     ];
     await this.em.save(this.variedadesIniciales);
+    console.log("guardo var");
   }
   async deleteProductor() {
     const productor = await this.em.findOne(Productor, { codProductor: 2 });
