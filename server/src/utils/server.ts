@@ -13,6 +13,8 @@ import session from "express-session";
 import connectRedis from "connect-redis";
 import { auth } from "../middleware/auth";
 import informeAdminRouter from "../controllers/admin/InformeAdminController";
+import cors from "cors";
+import { authorize } from '../middleware/authorize';
 
 export async function createServer() {
   const options = await getConnectionOptions(process.env.NODE_ENV);
@@ -29,6 +31,7 @@ export async function createServer() {
   console.log("is connected:", connection.isConnected);
 
   const app = express();
+  app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 
   const RedisStore = connectRedis(session);
   const redisClient = redis.createClient();
@@ -40,20 +43,26 @@ export async function createServer() {
       saveUninitialized: false,
       secret: "agagagagagagaga",
       resave: false,
-      cookie: { maxAge: 1000 * 60 * 60 * 24, httpOnly: true, secure: false },
+      cookie: {
+        maxAge: 1000 * 60 * 60 * 24,
+        httpOnly: true,
+        secure: false,
+        sameSite: "lax",
+      },
     })
   );
 
   app.use(express.json());
   app.use(userCommonRouter);
   app.use(auth);
+  app.use(informeCommonRouter);
+  app.use(authorize);
   app.use("/admin", encargadoFincaRouter);
   app.use("/admin", productorRouter);
   app.use("/admin", variedadRouter);
   app.use("/admin", userRoleRouter);
   app.use("/admin", fincaRouter);
   app.use("/admin", userAdminRouter);
-  app.use(informeCommonRouter);
   app.use("/admin", informeAdminRouter);
 
   return app;

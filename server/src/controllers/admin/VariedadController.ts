@@ -6,7 +6,7 @@ const variedadRouter = express.Router();
 
 variedadRouter.get("/variedad", async (_req: Request, res: Response) => {
   try {
-    const variedades = await getManager().find(Variedad, {});
+    const variedades = await getManager().find(Variedad, {select: ["nombreVariedad", "uuid", "fechaIngreso", "active", "fechaFinVigencia"], order: {nombreVariedad: "ASC"}});
     if (variedades.length !== 0) {
       res.status(200).json(variedades);
     } else {
@@ -87,6 +87,7 @@ variedadRouter.delete("/variedad/:id", async (req: Request, res: Response) => {
         .json({ error: "La variedad especificada no es vigente" });
     }
     variedad.active = false;
+    variedad.fechaFinVigencia = new Date();
     await getManager().save(variedad);
     return res.status(204).json({
       mensaje: `La variedad ${variedad.nombreVariedad} fue eliminada exitosamente`,

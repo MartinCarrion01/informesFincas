@@ -19,7 +19,8 @@ userCommonRouter.post("/login", async (req: Request, res: Response) => {
       relations: ["rol"],
       where: { dniUsuario: body.dniUsuario },
     });
-    if (!users) {
+    console.log('users', users)
+    if (users.length === 0) {
       return res
         .status(404)
         .json({ mensaje: "El usuario ingresado no existe" });
@@ -41,6 +42,7 @@ userCommonRouter.post("/login", async (req: Request, res: Response) => {
           }
         }
         (req.session as any).userUuid = users[i].uuid;
+        (req.session as any).userRole = users[i].rol.nombreUserRole;
         return res.status(200).json(users[i]);
       }
     }
