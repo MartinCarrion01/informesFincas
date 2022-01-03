@@ -19,33 +19,33 @@ import {
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-export const EditVariedad = ({
+export const EditProductor = ({
   isOpen,
   onClose,
   update,
-  variedad,
-  setVariedad,
+  productor,
+  setProductor,
 }) => {
   const [nombreInput, setNombreInput] = useState("");
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    if (!variedad) return;
-    setNombreInput(variedad.nombreVariedad);
+    if (!productor) return;
+    setNombreInput(productor.nombreProductor);
     return () => {
-      setVariedad(null);
+      setProductor(null);
     };
-  }, [variedad, setVariedad]);
+  }, [productor, setProductor]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (variedad) {
+      if (productor) {
         const body = {
-          nombreVariedad: nombreInput,
+          nombreProductor: nombreInput,
         };
         const res = await axios.put(
-          "http://localhost:3001/api/v1/admin/variedad/" + variedad.uuid,
+          "http://localhost:3001/api/v1/admin/productor/" + productor.uuid,
           body,
           { withCredentials: true }
         );
@@ -63,7 +63,7 @@ export const EditVariedad = ({
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Editar variedad</ModalHeader>
+        <ModalHeader>Editar productor</ModalHeader>
         <ModalCloseButton />
         <form onSubmit={handleSubmit}>
           <ModalBody>
@@ -87,11 +87,11 @@ export const EditVariedad = ({
                 </Alert>
               ) : null}
               <FormControl>
-                <FormLabel htmlFor="nombreVariedad">
-                  Nombre de la variedad
+                <FormLabel htmlFor="nombreProductor">
+                  Nombre del productor
                 </FormLabel>
                 <Input
-                  id="nombreVariedad"
+                  id="nombreProductor"
                   value={nombreInput}
                   onChange={(e) => setNombreInput(e.target.value)}
                 />
@@ -107,7 +107,7 @@ export const EditVariedad = ({
               type="submit"
               disabled={
                 nombreInput.trim() === "" ||
-                nombreInput.trim() === variedad.nombreVariedad
+                nombreInput.trim() === productor.nombreProductor
               }
             >
               Guardar

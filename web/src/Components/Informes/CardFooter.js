@@ -10,19 +10,21 @@ const NavLink = ({ informe, title }) => {
 
 export const CardFooter = ({ informe }) => {
   const { user } = useContext(UserContext);
+  const navigate = useNavigate();
   return (
     <Flex>
       <Box p="4">
         <Button
           colorScheme="blue"
           hidden={user.rol.nombreUserRole === "admin" ? false : true}
+          onClick={() => navigate(`/editareliminar/${informe.uuid}`)}
         >
           Editar o eliminar
         </Button>{" "}
       </Box>
       <Spacer />
       <Box p="4">
-        <NavLink informe={informe} title={"Ver detalle"} />
+        <NavLink informe={informe} title={"Ver detalle"}/>
       </Box>
     </Flex>
   );

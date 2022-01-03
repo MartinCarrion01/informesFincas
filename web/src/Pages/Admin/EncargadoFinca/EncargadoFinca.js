@@ -8,16 +8,16 @@ import {
 } from "@chakra-ui/react";
 import { useFetch } from "../../../Hooks/useFetch";
 import { Loading } from "../../../Components/Loading";
-import { Usuarios } from "../../../Components/Admin/Usuario/Usuarios";
-import { UsuarioForm } from "../../../Components/Admin/Usuario/UsuarioForm";
+import { EncargadoFincaForm } from "../../../Components/Admin/EncargadoFinca/EncargadoFincaForm";
+import { EncargadosFinca } from "../../../Components/Admin/EncargadoFinca/EncargadosFinca";
 import { useEffect } from "react";
 
-export const Usuario = () => {
+export const EncargadoFinca = () => {
   useEffect(() => {
-    document.title = "Usuarios - Informes Fincas";
+    document.title = "Encargados de finca - Informes Fincas";
   }, []);
   const { data, error, loading, update } = useFetch(
-    "http://localhost:3001/api/v1/admin/user"
+    "http://localhost:3001/api/v1/admin/encargadofinca"
   );
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -57,22 +57,32 @@ export const Usuario = () => {
               isFullWidth={true}
               onClick={onOpen}
             >
-              Agregar un nuevo recorredor
+              Agregar un nuevo encargado de finca
             </Button>
             {isOpen ? (
-            <UsuarioForm isOpen={isOpen} onClose={onClose} update={update} />
-          ) : null}
+              <EncargadoFincaForm
+                isOpen={isOpen}
+                onClose={onClose}
+                update={update}
+              />
+            ) : null}
           </>
         ) : null
       ) : (
         <>
           <Button colorScheme="teal" mt={6} isFullWidth={true} onClick={onOpen}>
-            Agregar un nuevo recorredor
+            Agregar un nuevo encargado de finca
           </Button>
           {isOpen ? (
-            <UsuarioForm isOpen={isOpen} onClose={onClose} update={update} />
+            <EncargadoFincaForm
+              isOpen={isOpen}
+              onClose={onClose}
+              update={update}
+            />
           ) : null}
-          {data ? <Usuarios usuarios={data} update={update} /> : null}
+          {data ? (
+            <EncargadosFinca encargadosFinca={data} update={update} />
+          ) : null}
         </>
       )}
     </Container>

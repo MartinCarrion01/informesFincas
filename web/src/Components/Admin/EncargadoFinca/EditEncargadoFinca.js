@@ -19,33 +19,36 @@ import {
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-export const EditVariedad = ({
+export const EditEncargadoFinca = ({
   isOpen,
   onClose,
   update,
-  variedad,
-  setVariedad,
+  encargadoFinca,
+  setEncargadoFinca,
 }) => {
   const [nombreInput, setNombreInput] = useState("");
+  const [numeroInput, setNumeroInput] = useState("");
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    if (!variedad) return;
-    setNombreInput(variedad.nombreVariedad);
+    if (!encargadoFinca) return;
+    setNombreInput(encargadoFinca.nombreEncargadoFinca);
+    setNumeroInput(encargadoFinca.numeroEncargadoFinca);
     return () => {
-      setVariedad(null);
+      setEncargadoFinca(null);
     };
-  }, [variedad, setVariedad]);
+  }, [encargadoFinca, setEncargadoFinca]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (variedad) {
+      if (encargadoFinca) {
         const body = {
-          nombreVariedad: nombreInput,
+          nombreEncargadoFinca: nombreInput,
+          numeroEncargadoFinca: numeroInput,
         };
         const res = await axios.put(
-          "http://localhost:3001/api/v1/admin/variedad/" + variedad.uuid,
+          "http://localhost:3001/api/v1/admin/encargadofinca/" + encargadoFinca.uuid,
           body,
           { withCredentials: true }
         );
@@ -63,7 +66,7 @@ export const EditVariedad = ({
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Editar variedad</ModalHeader>
+        <ModalHeader>Editar encargado de finca</ModalHeader>
         <ModalCloseButton />
         <form onSubmit={handleSubmit}>
           <ModalBody>
@@ -87,13 +90,23 @@ export const EditVariedad = ({
                 </Alert>
               ) : null}
               <FormControl>
-                <FormLabel htmlFor="nombreVariedad">
-                  Nombre de la variedad
+                <FormLabel htmlFor="nombreEncargadoFinca">
+                  Nombre del encargado de finca
                 </FormLabel>
                 <Input
-                  id="nombreVariedad"
+                  id="nombreEncargadoFinca"
                   value={nombreInput}
                   onChange={(e) => setNombreInput(e.target.value)}
+                />
+              </FormControl>
+              <FormControl>
+                <FormLabel htmlFor="numeroEncargadoFinca">
+                  Número de teléfono del encargado de finca
+                </FormLabel>
+                <Input
+                  id="numeroEncargadoFinca"
+                  value={numeroInput}
+                  onChange={(e) => setNumeroInput(e.target.value)}
                 />
               </FormControl>
             </VStack>
@@ -107,7 +120,9 @@ export const EditVariedad = ({
               type="submit"
               disabled={
                 nombreInput.trim() === "" ||
-                nombreInput.trim() === variedad.nombreVariedad
+                numeroInput.trim() === "" ||
+                (nombreInput.trim() === encargadoFinca.nombreEncargadoFinca &&
+                  numeroInput.trim() === encargadoFinca.numeroEncargadoFinca)
               }
             >
               Guardar

@@ -16,43 +16,31 @@ import {
   StackDivider,
   VStack,
 } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-export const EditVariedad = ({
-  isOpen,
-  onClose,
-  update,
-  variedad,
-  setVariedad,
-}) => {
+export const EncargadoFincaForm = ({ isOpen, onClose, update }) => {
   const [nombreInput, setNombreInput] = useState("");
+  const [numeroInput, setNumeroInput] = useState("");
   const [error, setError] = useState(false);
-
-  useEffect(() => {
-    if (!variedad) return;
-    setNombreInput(variedad.nombreVariedad);
-    return () => {
-      setVariedad(null);
-    };
-  }, [variedad, setVariedad]);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (variedad) {
-        const body = {
-          nombreVariedad: nombreInput,
-        };
-        const res = await axios.put(
-          "http://localhost:3001/api/v1/admin/variedad/" + variedad.uuid,
-          body,
-          { withCredentials: true }
-        );
-        if (res.status === 200) {
-          await update();
-          onClose();
-        }
+      const body = {
+        nombreEncargadoFinca: nombreInput,
+        numeroEncargadoFinca: numeroInput,
+      };
+      const res = await axios.post(
+        "http://localhost:3001/api/v1/admin/encargadofinca",
+        body,
+        { withCredentials: true }
+      );
+      if (res.status === 201) {
+        onClose();
+        navigate(0);
       }
     } catch (error) {
       setError(true);
@@ -63,7 +51,7 @@ export const EditVariedad = ({
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Editar variedad</ModalHeader>
+        <ModalHeader>Agregar nuevo encargado de finca</ModalHeader>
         <ModalCloseButton />
         <form onSubmit={handleSubmit}>
           <ModalBody>
@@ -87,13 +75,23 @@ export const EditVariedad = ({
                 </Alert>
               ) : null}
               <FormControl>
-                <FormLabel htmlFor="nombreVariedad">
-                  Nombre de la variedad
+                <FormLabel htmlFor="nombreEncargadoFinca">
+                  Nombre del encargado de finca
                 </FormLabel>
                 <Input
-                  id="nombreVariedad"
+                  id="nombreEncargadoFinca"
                   value={nombreInput}
                   onChange={(e) => setNombreInput(e.target.value)}
+                />
+              </FormControl>
+              <FormControl>
+                <FormLabel htmlFor="numeroEncargadoFinca">
+                  Número de teléfono del encargado de finca
+                </FormLabel>
+                <Input
+                  id="numeroEncargadoFinca"
+                  value={numeroInput}
+                  onChange={(e) => setNumeroInput(e.target.value)}
                 />
               </FormControl>
             </VStack>
@@ -105,10 +103,7 @@ export const EditVariedad = ({
             <Button
               colorScheme="green"
               type="submit"
-              disabled={
-                nombreInput.trim() === "" ||
-                nombreInput.trim() === variedad.nombreVariedad
-              }
+              disabled={nombreInput.trim() === "" || numeroInput.trim() === ""}
             >
               Guardar
             </Button>

@@ -18,26 +18,28 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export const VariedadForm = ({ isOpen, onClose, update }) => {
   const [nombreInput, setNombreInput] = useState("");
   const [error, setError] = useState(false);
+  const navigate = useNavigate();
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const body = {
         nombreVariedad: nombreInput,
-        codVariedad: new Date().getMilliseconds(),
       };
       const res = await axios.post(
-        "http://localhost:3001/admin/variedad",
+        "http://localhost:3001/api/v1/admin/variedad",
         body,
         { withCredentials: true }
       );
       if (res.status === 201) {
-        await update();
         onClose();
+        navigate(0);
       }
     } catch (error) {
       setError(true);

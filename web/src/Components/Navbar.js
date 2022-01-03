@@ -20,6 +20,8 @@ import { useContext } from "react";
 import { UserContext } from "../UserContext";
 import Cookies from "js-cookie";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 
 const LinkObject = function (name, route, id) {
   this.name = name;
@@ -52,6 +54,7 @@ const NavLink = ({ children }) => (
 export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const user = useContext(UserContext);
+  const navigate = useNavigate();
 
   const availableLinks = (user) => {
     if (user.rol.nombreUserRole === "recorredor") {
@@ -90,12 +93,12 @@ export default function Navbar() {
                 {`${user.user.nombreUsuario} ${user.user.apellidoUsuario}`}
               </MenuButton>
               <MenuList>
-                <MenuItem>Cambiar contraseña</MenuItem>
+                <MenuItem onClick={() => navigate('/cambiarcontrasena')}>Cambiar contraseña</MenuItem>
                 <MenuDivider />
                 <MenuItem
                   onClick={async () => {
                     const res = await axios.post(
-                      "http://localhost:3001/logout",
+                      "http://localhost:3001/api/v1/logout",
                       {},
                       { withCredentials: true }
                     );

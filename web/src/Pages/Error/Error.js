@@ -1,6 +1,10 @@
 import { Box, Heading, Text } from "@chakra-ui/react";
+import { useEffect } from "react";
 
 const Error = () => {
+  useEffect(() => {
+    document.title = "Error - Informes Fincas";
+  }, []);
   return (
     <Box textAlign="center" py={10} px={6}>
       <Heading

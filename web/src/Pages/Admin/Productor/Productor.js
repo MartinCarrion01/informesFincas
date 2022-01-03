@@ -8,22 +8,24 @@ import {
 } from "@chakra-ui/react";
 import { useFetch } from "../../../Hooks/useFetch";
 import { Loading } from "../../../Components/Loading";
-import { Usuarios } from "../../../Components/Admin/Usuario/Usuarios";
-import { UsuarioForm } from "../../../Components/Admin/Usuario/UsuarioForm";
+import { ProductorForm } from "../../../Components/Admin/Productor/ProductorForm";
+import { Productores } from "../../../Components/Admin/Productor/Productores";
 import { useEffect } from "react";
 
-export const Usuario = () => {
+export const Productor = () => {
   useEffect(() => {
-    document.title = "Usuarios - Informes Fincas";
+    document.title = "Productores - Informes Fincas";
   }, []);
   const { data, error, loading, update } = useFetch(
-    "http://localhost:3001/api/v1/admin/user"
+    "http://localhost:3001/api/v1/admin/productor"
   );
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   if (loading) {
     return <Loading />;
   }
+
+  console.log(error);
 
   return (
     <Container maxW="6xl" centerContent>
@@ -57,22 +59,26 @@ export const Usuario = () => {
               isFullWidth={true}
               onClick={onOpen}
             >
-              Agregar un nuevo recorredor
+              Agregar un nuevo productor
             </Button>
             {isOpen ? (
-            <UsuarioForm isOpen={isOpen} onClose={onClose} update={update} />
-          ) : null}
+              <ProductorForm
+                isOpen={isOpen}
+                onClose={onClose}
+                update={update}
+              />
+            ) : null}
           </>
         ) : null
       ) : (
         <>
           <Button colorScheme="teal" mt={6} isFullWidth={true} onClick={onOpen}>
-            Agregar un nuevo recorredor
+            Agregar un nuevo productor
           </Button>
           {isOpen ? (
-            <UsuarioForm isOpen={isOpen} onClose={onClose} update={update} />
+            <ProductorForm isOpen={isOpen} onClose={onClose} update={update} />
           ) : null}
-          {data ? <Usuarios usuarios={data} update={update} /> : null}
+          {data ? <Productores productores={data} update={update} /> : null}
         </>
       )}
     </Container>

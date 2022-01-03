@@ -4,8 +4,9 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { InformeFilter } from "../../Components/Informes/InformeFilter";
-import { ChevronDownIcon } from "@chakra-ui/icons";
 import { DescargarInformes } from "../../Components/Informes/DescargarInformes";
+import { ChevronDownIcon } from "@chakra-ui/icons";
+
 
 const Home = () => {
   const [informes, setInformes] = useState(null);
@@ -17,14 +18,13 @@ const Home = () => {
   const [fechaHastaFilter, setFechaHastaFilter] = useState("");
   const [showFilter, setShowFilter] = useState(false);
 
-  console.log(productorFilter);
 
   const navigate = useNavigate();
   useEffect(() => {
-    document.title = "Inicio - Informes";
+    document.title = "Inicio - Informes Fincas";
     const getInformes = async () => {
       try {
-        const res = await axios.get("http://localhost:3001/informe", {
+        const res = await axios.get("http://localhost:3001/api/v1/informe", {
           withCredentials: true,
         });
         setInformes(res.data);

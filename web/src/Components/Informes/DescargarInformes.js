@@ -12,10 +12,11 @@ export const DescargarInformes = () => {
   useEffect(() => {
     const getInformes = async () => {
       try {
-        const res = await axios.get("http://localhost:3001/csvinformes", {
+        const res = await axios.get("http://localhost:3001/api/v1/csvinformes", {
           withCredentials: true,
         });
         const header = [
+          "codInforme",
           "informeTitulo",
           "fechaIngreso",
           "usuario",

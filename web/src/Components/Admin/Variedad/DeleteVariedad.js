@@ -35,7 +35,7 @@ export const DeleteVariedad = ({
   const handleEliminar = async () => {
     try {
       const res = await axios.delete(
-        `http://localhost:3001/admin/variedad/${variedad.uuid}`,
+        `http://localhost:3001/api/v1/admin/variedad/${variedad.uuid}`,
         { withCredentials: true }
       );
       if (res.status === 204) {

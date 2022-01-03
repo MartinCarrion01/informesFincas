@@ -11,8 +11,9 @@ const DetalleInforme = () => {
   useEffect(() => {
     const getInformes = async () => {
       try {
-        const res = await axios.get(`http://localhost:3001/informe/${params.id}`, { withCredentials: true });
+        const res = await axios.get(`http://localhost:3001/api/v1/informe/${params.id}`, { withCredentials: true });
         setInforme(res.data);
+        document.title = res.data.informeTitulo + " - Informes Fincas"
       } catch (error) {
         if (error.response.status === 404) {
           setError(error.response.data.mensaje);

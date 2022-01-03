@@ -14,7 +14,11 @@ import { CargarInforme } from "./Pages/CargarInforme/CargarInforme";
 import { ComentarioInforme } from "./Pages/DetalleInforme/ComentarioInforme";
 import { Usuario } from "./Pages/Admin/Usuario/Usuario";
 import { Variedad } from "./Pages/Admin/Variedad/Variedad";
-
+import { Productor } from "./Pages/Admin/Productor/Productor";
+import { EncargadoFinca } from "./Pages/Admin/EncargadoFinca/EncargadoFinca";
+import { Finca } from "./Pages/Admin/Finca/Finca";
+import { Password } from "./Pages/Password/Password";
+import { EditarEliminarInforme } from "./Pages/EditarEliminarInforme/EditarEliminarInforme";
 
 const App = () => {
   const [user, setUser] = React.useState(null);
@@ -60,18 +64,27 @@ const App = () => {
     );
   }
 
+  const changePassword = (password) => {
+    setUser({...user, password: password})
+  }
+
   return (
     <UserContext.Provider value={{ user, setUser }}>
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/informe/:id" element={<DetalleInforme />} />
+        <Route path="/editareliminar/:id" element={<EditarEliminarInforme />} />
         <Route path="/nuevocomentario/:id" element={<ComentarioInforme />} />
         <Route path="misinformes" element={<Perfil />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/admin/usuario" element={<Usuario />} />
         <Route path="/admin/variedad" element={<Variedad />} />
+        <Route path="/admin/finca" element={<Finca />} />
+        <Route path="/admin/encargadofinca" element={<EncargadoFinca />} />
+        <Route path="/admin/productor" element={<Productor />} />
         <Route path="/nuevoinforme" element={<CargarInforme />} />
+        <Route path="/cambiarcontrasena" element={<Password changePassword={changePassword}/>} />
         <Route path="*" element={<Error />} />
       </Routes>
     </UserContext.Provider>

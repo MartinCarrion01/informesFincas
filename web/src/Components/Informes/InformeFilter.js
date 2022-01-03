@@ -24,7 +24,7 @@ export const InformeFilter = ({ setFinca, setVariedad, setProductor, setFd, setF
   useEffect(() => {
     const getData = async () => {
       try {
-        const res = await axios.get("http://localhost:3001/alldata", {
+        const res = await axios.get("http://localhost:3001/api/v1/alldata", {
           withCredentials: true,
         });
         setFincas(res.data.fincas);

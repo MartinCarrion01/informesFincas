@@ -21,11 +21,10 @@ import { useNavigate } from "react-router-dom";
 
 export const ComentarioForm = ({informeId}) => {
   const [seCosecho, setSeCosecho] = useState("");
-  const [cant, setCant] = useState("");
+  const [cant, setCant] = useState(0);
   const [fecha, setFecha] = useState(new Date());
   const [commentInput, setCommentInput] = useState("");
   const commentError = commentInput.length === 0 || commentInput.length > 300;
-  const cantError = cant === 0;
   const navigate = useNavigate();
 
 
@@ -50,7 +49,7 @@ export const ComentarioForm = ({informeId}) => {
     }
     try {
       const res = await axios.post(
-        `http://localhost:3001/informe/${informeId.id}`,
+        `http://localhost:3001/api/v1/informe/${informeId.id}`,
         comment,
         { withCredentials: true }
       );
@@ -126,7 +125,7 @@ export const ComentarioForm = ({informeId}) => {
             {seCosecho !== "" ? (
               <Box>
                 <Button
-                  isDisabled={cantError || commentError}
+                  isDisabled={commentError}
                   colorScheme="teal"
                   isFullWidth={true}
                   type="submit"

@@ -10,7 +10,6 @@ import {
   NumberInputStepper,
   NumberIncrementStepper,
   NumberDecrementStepper,
-  FormErrorMessage,
 } from "@chakra-ui/react";
 import { DatePicker, LocalizationProvider } from "@mui/lab";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
@@ -32,6 +31,7 @@ export const SeCosecho = ({ seCosecho, cant, fecha }) => {
               <NumberInput
                 mt={4}
                 min={0}
+                step={1000}
                 clampValueOnBlur={false}
                 id="cantKgEstimadoCosecha"
                 onChange={(valueString) => cant.setCant(Number(valueString))}
@@ -44,11 +44,6 @@ export const SeCosecho = ({ seCosecho, cant, fecha }) => {
                 </NumberInputStepper>
               </NumberInput>
             </Stack>
-            {cant.cant > 0 ? null : (
-              <FormErrorMessage>
-                La cantidad de kilos a cosechar debe ser mayor a 0
-              </FormErrorMessage>
-            )}
           </FormControl>
         </Box>
         <Spacer />

@@ -11,40 +11,38 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
-import { EditVariedad } from "./EditVariedad";
+import { EditProductor } from "./EditProductor";
 import { useState } from "react";
-import { DeleteVariedad } from "./DeleteVariedad";
+import { DeleteProductor } from "./DeleteProductor";
 import { useModalClose } from "../../../Hooks/useModalClose";
 
-export const Variedades = ({ variedades, update }) => {
-  const [variedadToEdit, setVariedadToEdit] = useState(null);
-  const [variedadToDelete, setVariedadToDelete] = useState(null);
+export const Productores = ({ productores, update }) => {
   const { isOpen, onOpen, onClose } = useModalClose();
+  const [productorToEdit, setProductorToEdit] = useState(null);
+  const [productorToDelete, setProductorToDelete] = useState(null);
 
-  console.log(variedadToDelete, variedadToEdit);
-
-  return !variedades ? null : (
+  return !productores ? null : (
     <>
-      {variedadToEdit ? (
-        <EditVariedad
+      {productorToEdit ? (
+        <EditProductor
           isOpen={isOpen}
-          onClose={() => onClose(setVariedadToEdit)}
-          variedad={variedadToEdit}
-          setVariedad={setVariedadToEdit}
+          onClose={() => onClose(setProductorToEdit)}
+          productor={productorToEdit}
+          setProductor={setProductorToEdit}
           update={update}
         />
       ) : null}
-      {variedadToDelete ? (
-        <DeleteVariedad
+      {productorToDelete ? (
+        <DeleteProductor
           isOpen={isOpen}
-          onClose={() => onClose(setVariedadToDelete)}
-          variedad={variedadToDelete}
-          setVariedad={setVariedadToDelete}
+          onClose={() => onClose(setProductorToDelete)}
+          productor={productorToDelete}
+          setProductor={setProductorToDelete}
           update={update}
         />
       ) : null}
       <Table variant="simple">
-        <TableCaption placement="top">Variedades</TableCaption>
+        <TableCaption placement="top">Productores</TableCaption>
         <Thead>
           <Tr>
             <Th>ID</Th>
@@ -56,21 +54,21 @@ export const Variedades = ({ variedades, update }) => {
           </Tr>
         </Thead>
         <Tbody>
-          {variedades.map((variedad) => {
+          {productores.map((productor) => {
             return (
               <Tr
-                key={variedad.uuid}
-                bgColor={variedad.active ? "green.100" : "red.100"}
+                key={productor.uuid}
+                bgColor={productor.active ? "green.100" : "red.100"}
               >
-                <Td>{variedad.uuid}</Td>
-                <Td>{variedad.nombreVariedad}</Td>
+                <Td>{productor.uuid}</Td>
+                <Td>{productor.nombreProductor}</Td>
                 <Td>
-                  {new Date(variedad.fechaIngreso).toLocaleString("es-AR")}
+                  {new Date(productor.fechaIngreso).toLocaleString("es-AR")}
                 </Td>
-                <Td>{variedad.active ? "Sí" : "No"}</Td>
+                <Td>{productor.active ? "Sí" : "No"}</Td>
                 <Td>
-                  {variedad.fechaFinVigencia
-                    ? new Date(variedad.fechaFinVigencia).toLocaleString(
+                  {productor.fechaFinVigencia
+                    ? new Date(productor.fechaFinVigencia).toLocaleString(
                         "es-AR"
                       )
                     : "Está activo"}
@@ -83,20 +81,20 @@ export const Variedades = ({ variedades, update }) => {
                     <IconButton
                       colorScheme="blue"
                       aria-label="Editar"
-                      disabled={!variedad.active}
+                      disabled={!productor.active}
                       icon={<EditIcon />}
                       onClick={() => {
-                        onOpen(variedad, setVariedadToEdit);
+                        onOpen(productor, setProductorToEdit)
                       }}
                     />
                     <Spacer />
                     <IconButton
                       colorScheme="red"
                       aria-label="Eliminar"
-                      disabled={!variedad.active}
+                      disabled={!productor.active}
                       icon={<DeleteIcon />}
                       onClick={() => {
-                        onOpen(variedad, setVariedadToDelete);
+                        onOpen(productor, setProductorToDelete);
                       }}
                     />
                   </Flex>

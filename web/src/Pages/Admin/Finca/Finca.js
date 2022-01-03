@@ -8,16 +8,16 @@ import {
 } from "@chakra-ui/react";
 import { useFetch } from "../../../Hooks/useFetch";
 import { Loading } from "../../../Components/Loading";
-import { Usuarios } from "../../../Components/Admin/Usuario/Usuarios";
-import { UsuarioForm } from "../../../Components/Admin/Usuario/UsuarioForm";
+import { Fincas } from "../../../Components/Admin/Finca/Fincas";
+import { FincaForm } from "../../../Components/Admin/Finca/FincaForm";
 import { useEffect } from "react";
 
-export const Usuario = () => {
+export const Finca = () => {
   useEffect(() => {
-    document.title = "Usuarios - Informes Fincas";
+    document.title = "Fincas - Informes Fincas";
   }, []);
   const { data, error, loading, update } = useFetch(
-    "http://localhost:3001/api/v1/admin/user"
+    "http://localhost:3001/api/v1/admin/finca"
   );
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -57,22 +57,22 @@ export const Usuario = () => {
               isFullWidth={true}
               onClick={onOpen}
             >
-              Agregar un nuevo recorredor
+              Agregar una nueva finca
             </Button>
             {isOpen ? (
-            <UsuarioForm isOpen={isOpen} onClose={onClose} update={update} />
-          ) : null}
+              <FincaForm isOpen={isOpen} onClose={onClose} update={update} />
+            ) : null}
           </>
         ) : null
       ) : (
         <>
           <Button colorScheme="teal" mt={6} isFullWidth={true} onClick={onOpen}>
-            Agregar un nuevo recorredor
+            Agregar una nueva finca
           </Button>
           {isOpen ? (
-            <UsuarioForm isOpen={isOpen} onClose={onClose} update={update} />
+            <FincaForm isOpen={isOpen} onClose={onClose} update={update} />
           ) : null}
-          {data ? <Usuarios usuarios={data} update={update} /> : null}
+          {data ? <Fincas fincas={data} update={update} /> : null}
         </>
       )}
     </Container>

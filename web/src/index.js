@@ -1,5 +1,4 @@
 import * as React from "react";
-import { CookiesProvider } from "react-cookie";
 import * as ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
@@ -13,13 +12,11 @@ const theme = deepmerge(chakraTheme, muiTheme);
 
 ReactDOM.render(
   <BrowserRouter>
-    <CookiesProvider>
       <ThemeProvider theme={theme}>
         <ChakraProvider theme={theme} resetCSS>
           <App />
         </ChakraProvider>
       </ThemeProvider>
-    </CookiesProvider>
   </BrowserRouter>,
   document.getElementById("root")
 );

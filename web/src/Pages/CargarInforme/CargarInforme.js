@@ -13,23 +13,23 @@ export const CargarInforme = () => {
   const [loading, setLoading] = useState(true);
   const [fincas, setFincas] = useState(null);
   const [variedades, setVariedades] = useState(null);
+  const [productores, setProductores] = useState(null)
   const [error, setError] = useState();
 
   useEffect(() => {
-    document.title = "Cargar nuevo informe - Informes";
+    document.title = "Cargar nuevo informe - Informes Fincas";
     const getData = async () => {
       try {
-        const res = await axios.get("http://localhost:3001/data", {
+        const res = await axios.get("http://localhost:3001/api/v1/data", {
           withCredentials: true,
         });
         setFincas(res.data.fincas);
         setVariedades(res.data.variedades);
+        setProductores(res.data.productores)
         setLoading(false);
       } catch (error) {
-        if (error.response.status === 404) {
-          setLoading(false);
-          setError(error.response.data.mensaje);
-        }
+        setError(error.response.data.mensaje);
+        setLoading(false);
       }
     };
     getData();
@@ -59,7 +59,7 @@ export const CargarInforme = () => {
             <AlertTitle mr={2}>{error}</AlertTitle>
           </Alert>
         ) : (
-          <InformeForm fincas={fincas} variedades={variedades} />
+          <InformeForm fincas={fincas} variedades={variedades} productores={productores} />
         )}
       </Container>
     </div>
