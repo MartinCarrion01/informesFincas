@@ -36,8 +36,8 @@ export class FincaTestHelper {
   }
   async initProductores() {
     this.productoresIniciales = [
-      this.em.create(Productor, { nombreProductor: "prod1", codProductor: 1 }),
-      this.em.create(Productor, { nombreProductor: "prod2", codProductor: 2 }),
+      this.em.create(Productor, { nombreProductor: "prod1" }),
+      this.em.create(Productor, { nombreProductor: "prod2" }),
     ];
     await this.em.save(this.productoresIniciales);
     console.log("guardo prod");
@@ -47,12 +47,10 @@ export class FincaTestHelper {
       this.em.create(EncargadoFinca, {
         nombreEncargadoFinca: "enc1",
         numeroEncargadoFinca: "261",
-        codEncargadoFinca: 1,
       }),
       this.em.create(EncargadoFinca, {
         nombreEncargadoFinca: "enc2",
         numeroEncargadoFinca: "262",
-        codEncargadoFinca: 2,
       }),
     ];
     await this.em.save(this.encargadosFincaIniciales);
@@ -60,14 +58,14 @@ export class FincaTestHelper {
   }
   async initVariedades() {
     this.variedadesIniciales = [
-      this.em.create(Variedad, { nombreVariedad: "var1", codVariedad: 1 }),
-      this.em.create(Variedad, { nombreVariedad: "var2", codVariedad: 2 }),
+      this.em.create(Variedad, { nombreVariedad: "var1" }),
+      this.em.create(Variedad, { nombreVariedad: "var2" }),
     ];
     await this.em.save(this.variedadesIniciales);
     console.log("guardo var");
   }
   async deleteProductor() {
-    const productor = await this.em.findOne(Productor, { codProductor: 2 });
+    const productor = await this.em.findOne(Productor, { nombreProductor: "prod1" });
     if (productor) {
       productor.active = false;
       await this.em.save(productor);

@@ -5,7 +5,7 @@ import { Productor } from "../../entities/Productor";
 const productorRouter = express.Router();
 
 productorRouter.get("/productor", async (_req: Request, res: Response) => {
-  const productores = await getManager().find(Productor, {});
+  const productores = await getManager().find(Productor, {select: ["nombreProductor", "uuid", "fechaIngreso", "active", "fechaFinVigencia"], order: {nombreProductor: "ASC"}});
   if (productores.length !== 0) {
     res.status(200).json(productores);
   } else {
@@ -25,7 +25,6 @@ productorRouter.post("/productor", async (req: Request, res: Response) => {
   try {
     const productor = getManager().create(Productor, {
       nombreProductor: body.nombreProductor,
-      codProductor: body.codProductor,
     });
     await getManager().save(productor);
     return res.status(201).json(productor);
@@ -84,6 +83,7 @@ productorRouter.delete(
           .status(403)
           .json({ error: "El productor especificado no es vigente" });
       }
+      productor.fechaFinVigencia = new Date();
       productor.active = false;
       await getManager().save(productor);
       return res.status(204).json({

@@ -4,13 +4,10 @@ import { Finca } from "./Finca";
 
 @Entity()
 export class EncargadoFinca extends Base {
-  @Column({ unique: true })
-  codEncargadoFinca: number;
-
   @Column()
   nombreEncargadoFinca: String;
 
-  @Column({unique: true})
+  @Column()
   numeroEncargadoFinca: String;
 
   @OneToOne(() => Finca, (finca) => finca.encargadoFinca)

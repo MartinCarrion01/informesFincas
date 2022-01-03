@@ -8,7 +8,8 @@ import { Variedad } from "./Variedad";
 
 @Entity()
 export class Informe extends Base {
-  @Column({ unique: true })
+  
+  @Column()
   codInforme: number;
 
   @Column()

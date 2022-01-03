@@ -9,6 +9,9 @@ export class User extends Base {
   @Column()
   dniUsuario: number;
 
+  @Column({unique: true})
+  userName: string;
+
   @Column()
   nombreUsuario: String;
 

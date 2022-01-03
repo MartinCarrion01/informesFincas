@@ -6,7 +6,7 @@ const userRoleRouter = express.Router();
 
 userRoleRouter.get("/userrole", async (_req: Request, res: Response) => {
   try {
-    const userRoles = await getManager().find(UserRole, {});
+    const userRoles = await getManager().find(UserRole, {where: {active: true}});
     if (userRoles.length !== 0) {
       res.status(200).json(userRoles);
     } else {
@@ -85,6 +85,7 @@ userRoleRouter.delete("/userrole/:id", async (req: Request, res: Response) => {
         .status(403)
         .json({ error: "El rol de usuario especificado no es vigente" });
     }
+    userRole.fechaFinVigencia = new Date();
     userRole.active = false;
     await getManager().save(userRole);
     return res.status(204).json({

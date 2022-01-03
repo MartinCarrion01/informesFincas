@@ -16,18 +16,17 @@ import { Variedad } from "./Variedad";
 
 @Entity()
 export class Finca extends Base {
-  @Column({ unique: true })
-  codFinca: number;
-
   @Column()
   nombreFinca: String;
 
-  @Column({ unique: true })
+  @Column()
   coordenadasFinca: String;
 
-  @OneToOne(() => EncargadoFinca, (encargadoFinca) => encargadoFinca.finca)
+  @OneToOne(() => EncargadoFinca, (encargadoFinca) => encargadoFinca.finca, {
+    nullable: true,
+  })
   @JoinColumn()
-  encargadoFinca: EncargadoFinca;
+  encargadoFinca: EncargadoFinca | null;
 
   @ManyToOne(() => Productor, (productor) => productor.fincas)
   productor: Productor;

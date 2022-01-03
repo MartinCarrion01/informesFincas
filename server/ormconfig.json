@@ -1,39 +1,17 @@
-[
-  {
-    "name": "development",
-    "type": "mysql",
-    "host": "localhost",
-    "port": 3306,
-    "username": "root",
-    "password": "password",
-    "database": "informesfincas",
-    "logging": true,
-    "synchronize": false,
-    "entities": ["src/entities/**/*.ts"],
-    "migrationsTableName": "migrations_typeorm",
-    "migrations": ["src/migrations/**/*.ts"],
-    "cli": {
-      "entitiesDir": "src/entities",
-      "migrationsDir": "src/migrations"
-    }
-  },
-  {
-    "name": "test",
-    "type": "mysql",
-    "host": "localhost",
-    "port": 3306,
-    "username": "root",
-    "password": "password",
-    "database": "informesfincastest",
-    "logging": true,
-    "synchronize": true,
-    "dropSchema": true,
-    "entities": ["src/entities/**/*.ts"],
-    "migrationsTableName": "migrations_typeorm",
-    "migrations": ["src/migrations/**/*.ts"],
-    "cli": {
-      "entitiesDir": "src/entities",
-      "migrationsDir": "src/migrations"
-    }
+{
+  "type": "mysql",
+  "host": "localhost",
+  "port": 3306,
+  "username": "root",
+  "password": "password",
+  "database": "informesfincas",
+  "logging": true,
+  "synchronize": false,
+  "entities": ["dist/entities/**/*.js"],
+  "migrationsTableName": "migrations_typeorm",
+  "migrations": ["dist/migrations/**/*.js"],
+  "cli": {
+    "entitiesDir": "dist/entities",
+    "migrationsDir": "dist/migrations"
   }
-]
+}

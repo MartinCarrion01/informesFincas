@@ -85,7 +85,6 @@ describe("una encargadoFinca es creada", () => {
     const encargadoFinca = encargadoFincaTestHelper.em.create(EncargadoFinca, {
       nombreEncargadoFinca: "prod4",
       numeroEncargadoFinca: "261",
-      codEncargadoFinca: 4,
     });
     await api.post("/admin/encargadofinca").send(encargadoFinca).expect(400);
     const encargadosFinca = await encargadoFincaTestHelper.encargadoFincaAtDb();
@@ -97,7 +96,6 @@ describe("una encargadoFinca es creada", () => {
     const encargadoFinca = encargadoFincaTestHelper.em.create(EncargadoFinca, {
       nombreEncargadoFinca: "prod4",
       numeroEncargadoFinca: "264",
-      codEncargadoFinca: 4,
     });
     await api.post("/admin/encargadofinca").send(encargadoFinca).expect(201);
     const encargadosFinca = await encargadoFincaTestHelper.encargadoFincaAtDb();
@@ -147,7 +145,7 @@ describe("una encargadoFinca es actualizada", () => {
     await encargadoFincaTestHelper.expiredEncargadoFinca();
     const encargadosFinca = await encargadoFincaTestHelper.encargadoFincaAtDb();
     const encargadoFinca = encargadosFinca.find(
-      (encargadoFinca) => encargadoFinca.codEncargadoFinca === 3
+      (encargadoFinca) => encargadoFinca.nombreEncargadoFinca === "enc3"
     );
     const updatedEncargadoFinca = {
       ...EncargadoFinca,
@@ -163,7 +161,7 @@ describe("una encargadoFinca es actualizada", () => {
   test("no se actualiza una encargadoFinca si el numero ya existe", async () => {
     const encargadosFinca = await encargadoFincaTestHelper.encargadoFincaAtDb();
     const encargadoFinca = encargadosFinca.find(
-      (encargadoFinca) => encargadoFinca.codEncargadoFinca === 3
+      (encargadoFinca) => encargadoFinca.nombreEncargadoFinca === "enc3"
     );
     const updatedEncargadoFinca = {
       ...EncargadoFinca,
@@ -179,7 +177,7 @@ describe("una encargadoFinca es actualizada", () => {
   test("se actualiza una encargadoFinca correctamente", async () => {
     const encargadosFinca = await encargadoFincaTestHelper.encargadoFincaAtDb();
     const encargadoFinca = encargadosFinca.find(
-      (encargadoFinca) => encargadoFinca.codEncargadoFinca === 3
+      (encargadoFinca) => encargadoFinca.nombreEncargadoFinca === "enc3"
     );
     const updatedEncargadoFinca = {
       ...EncargadoFinca,
@@ -207,7 +205,7 @@ describe("una encargadoFinca es dada de baja", () => {
     await encargadoFincaTestHelper.expiredEncargadoFinca();
     const encargadosFinca = await encargadoFincaTestHelper.encargadoFincaAtDb();
     const encargadoFinca = encargadosFinca.find(
-      (encargadoFinca) => encargadoFinca.codEncargadoFinca === 3
+      (encargadoFinca) => encargadoFinca.nombreEncargadoFinca === "enc3"
     );
     await api
       .delete(`/admin/encargadofinca/${encargadoFinca!.uuid}`)
@@ -217,7 +215,7 @@ describe("una encargadoFinca es dada de baja", () => {
   test("una encargadoFinca es dada de baja", async () => {
     const encargadosFinca = await encargadoFincaTestHelper.encargadoFincaAtDb();
     const encargadoFinca = encargadosFinca.find(
-      (encargadoFinca) => encargadoFinca.codEncargadoFinca === 3
+      (encargadoFinca) => encargadoFinca.nombreEncargadoFinca === "enc3"
     );
     await api
       .delete(`/admin/encargadofinca/${encargadoFinca!.uuid}`)

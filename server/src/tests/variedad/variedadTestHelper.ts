@@ -9,13 +9,13 @@ export class VariedadTestHelper {
   }
   initVariedades() {
     this.variedadesIniciales = [
-      this.em.create(Variedad, { nombreVariedad: "var1", codVariedad: 1 }),
-      this.em.create(Variedad, { nombreVariedad: "var2", codVariedad: 2 }),
-      this.em.create(Variedad, { nombreVariedad: "var3", codVariedad: 3 }),
+      this.em.create(Variedad, { nombreVariedad: "var1"}),
+      this.em.create(Variedad, { nombreVariedad: "var2"}),
+      this.em.create(Variedad, { nombreVariedad: "var3"}),
     ];
   }
   async expiredVariedad() {
-    const variedad = await this.em.findOne(Variedad, { codVariedad: 3 });
+    const variedad = await this.em.findOne(Variedad, { nombreVariedad: "var3" });
     if (variedad) {
       variedad.active = false;
       await this.em.save(variedad);

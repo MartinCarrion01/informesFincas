@@ -50,7 +50,6 @@ encargadoFincaRouter.post(
       const encargadoFinca = getManager().create(EncargadoFinca, {
         nombreEncargadoFinca: body.nombreEncargadoFinca,
         numeroEncargadoFinca: body.numeroEncargadoFinca,
-        codEncargadoFinca: body.codEncargadoFinca,
       });
       await getManager().save(encargadoFinca);
       return res.status(201).json(encargadoFinca);
@@ -128,6 +127,7 @@ encargadoFincaRouter.delete(
           .status(403)
           .json({ error: "El encargadoFinca especificado no es vigente" });
       }
+      encargadoFinca.fechaFinVigencia = new Date()
       encargadoFinca.active = false;
       await getManager().save(encargadoFinca);
       return res.status(204).json({

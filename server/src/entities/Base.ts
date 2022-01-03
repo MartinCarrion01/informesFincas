@@ -4,10 +4,10 @@ export abstract class Base {
   @PrimaryGeneratedColumn("uuid")
   uuid: String;
 
-  @Column({ type: "date" })
+  @Column({ type: "datetime" })
   fechaIngreso: Date = new Date();
 
-  @Column({ nullable: true })
+  @Column({ type: "datetime", nullable: true })
   fechaFinVigencia: Date;
 
   @Column({ default: true })

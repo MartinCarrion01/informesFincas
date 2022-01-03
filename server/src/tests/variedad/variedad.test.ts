@@ -54,7 +54,6 @@ describe("una variedad es creada", () => {
   test("si ya existe una var con ese nombre, falla", async () => {
     const variedad = variedadTestHelper.em.create(Variedad, {
       nombreVariedad: "var1",
-      codVariedad: 4,
     });
     await api.post("/admin/variedad").send(variedad).expect(400);
     const variedades = await variedadTestHelper.variedadAtDb();
@@ -65,7 +64,6 @@ describe("una variedad es creada", () => {
   test("una variedad se crea correctamente", async () => {
     const variedad = variedadTestHelper.em.create(Variedad, {
       nombreVariedad: "var4",
-      codVariedad: 4,
     });
     await api.post("/admin/variedad").send(variedad).expect(201);
     const variedades = await variedadTestHelper.variedadAtDb();
@@ -90,7 +88,7 @@ describe("una variedad es actualizada", () => {
   test("no se actualiza una variedad no vigente", async () => {
     await variedadTestHelper.expiredVariedad();
     const variedades = await variedadTestHelper.variedadAtDb();
-    const variedad = variedades.find((variedad) => variedad.codVariedad === 3);
+    const variedad = variedades.find((variedad) => variedad.nombreVariedad === "var3");
     const updatedVariedad = {
       ...variedad,
       nombreVariedad: "var4new",
@@ -103,7 +101,7 @@ describe("una variedad es actualizada", () => {
   });
   test("no se actualiza una variedad si el nombre ya existe", async () => {
     const variedades = await variedadTestHelper.variedadAtDb();
-    const variedad = variedades.find((variedad) => variedad.codVariedad === 3);
+    const variedad = variedades.find((variedad) => variedad.nombreVariedad === "var3");
     const updatedVariedad = {
       ...variedad,
       nombreVariedad: "var1",
@@ -116,7 +114,7 @@ describe("una variedad es actualizada", () => {
   });
   test("se actualiza una variedad correctamente", async () => {
     const variedades = await variedadTestHelper.variedadAtDb();
-    const variedad = variedades.find((variedad) => variedad.codVariedad === 3);
+    const variedad = variedades.find((variedad) => variedad.nombreVariedad === "var3");
     const updatedVariedad = {
       ...variedad,
       nombreVariedad: "var3new",
@@ -138,7 +136,7 @@ describe("una variedad es dada de baja", () => {
   test("una variedad no vigente no se vuelve a dar de baja", async () => {
     await variedadTestHelper.expiredVariedad();
     const variedades = await variedadTestHelper.variedadAtDb();
-    const variedad = variedades.find((variedad) => variedad.codVariedad === 3);
+    const variedad = variedades.find((variedad) => variedad.nombreVariedad === "var3");
     await api
       .delete(`/admin/variedad/${variedad!.uuid}`)
       .send(variedad)
@@ -146,7 +144,7 @@ describe("una variedad es dada de baja", () => {
   });
   test("una variedad es dada de baja", async () => {
     const variedades = await variedadTestHelper.variedadAtDb();
-    const variedad = variedades.find((variedad) => variedad.codVariedad === 3);
+    const variedad = variedades.find((variedad) => variedad.nombreVariedad === "var3");
     await api
       .delete(`/admin/variedad/${variedad!.uuid}`)
       .send(variedad)

@@ -7,6 +7,7 @@ import { User } from "../../entities/User";
 import { InformeComentario } from "../../entities/InformeComentario";
 import { InformeCosechaEstimada } from "../../entities/InformeCosechaEstimada";
 import { Productor } from '../../entities/Productor';
+import { codInformeGenerator } from '../../utils/codInformeGenerator';
 
 const informeRouter = express.Router();
 
@@ -63,6 +64,7 @@ informeRouter.get("/informe/:id", async (req: Request, res: Response) => {
       .leftJoinAndSelect("informe.informeCosechasEstimadas", "cosechas")
       .leftJoinAndSelect("informe.informeComentarios", "comentarios")
       .where("informe.uuid = :id", { id: informeId })
+      .where("informe.active = :active", { active: true })
       .andWhere("cosechas.active = :active", { active: true })
       .select([
         "informe.informeTitulo",
@@ -101,14 +103,16 @@ informeRouter.get("/data", async (_req: Request, res: Response) => {
   try {
     const fincas = await getManager()
       .createQueryBuilder(Finca, "finca")
-      .where("active= :active", { active: true })
-      .select(["finca.nombreFinca", "finca.uuid"])
+      .leftJoinAndSelect("finca.productor", "productor")
+      .where("finca.active= :active", { active: true })
+      .select(["finca.nombreFinca", "finca.uuid", "productor.uuid", "productor.nombreProductor"])
       .getMany();
 
     const variedades = await getManager()
       .createQueryBuilder(Variedad, "variedad")
-      .where("active= :active", { active: true })
-      .select(["variedad.nombreVariedad", "variedad.uuid"])
+      .leftJoinAndSelect("variedad.fincas", "finca")
+      .where("variedad.active= :active", { active: true })
+      .select(["variedad.nombreVariedad", "variedad.uuid", "finca.nombreFinca", "finca.uuid"])
       .getMany();
 
       const productores = await getManager()
@@ -146,6 +150,45 @@ informeRouter.get("/data", async (_req: Request, res: Response) => {
     return res.status(400).json({ error });
   }
 });
+
+informeRouter.get("/misinformes", async (req: Request, res: Response) => {
+  try {
+    const informes = await getManager()
+      .createQueryBuilder(Informe, "informe")
+      .leftJoinAndSelect("informe.finca", "finca")
+      .leftJoinAndSelect("finca.productor", "productor")
+      .leftJoinAndSelect("informe.variedad", "variedad")
+      .leftJoinAndSelect("informe.usuarioRecorredor", "usuario")
+      .leftJoinAndSelect("informe.informeCosechasEstimadas", "cosechas")
+      .where("informe.active = :active", { active: true })
+      .andWhere("usuario.uuid = :uuid", {uuid: (req.session as any).userUuid})
+      .andWhere("cosechas.active = :active", { active: true })
+      .select([
+        "informe.uuid",
+        "informe.informeTitulo",
+        "informe.fechaIngreso",
+        "informe.fechaRealCosecha",
+        "informe.cantKgRealCosecha",
+        "finca.nombreFinca",
+        "variedad.nombreVariedad",
+        "usuario.nombreUsuario",
+        "usuario.apellidoUsuario",
+        "usuario.uuid",
+        "cosechas.cantKgEstimadoCosecha",
+        "cosechas.fechaEstimadaCosecha",
+        "productor.nombreProductor",
+      ])
+      .orderBy("informe.fechaIngreso", "DESC")
+      .getMany();
+    console.log("informes", informes);
+    if (informes.length === 0) {
+      return res.status(404).json({ mensaje: "No ha realizado ningún informe" });
+    }
+    return res.status(200).json(informes);
+  } catch (error) {
+    return res.status(400).json({ error });
+  }
+})
 
 informeRouter.get("/alldata", async (_req: Request, res: Response) => {
   try {
@@ -209,14 +252,15 @@ informeRouter.post("/informe", async (req: Request, res: Response) => {
     const user = await getManager().findOne(User, {
       where: { uuid: userUuid },
     });
+    const cod = await codInformeGenerator()
     const informe = getManager().create(Informe, {
-      codInforme: body.codInforme,
-      informeTitulo: `Informe recorrida ${new Date().toLocaleDateString()} ${
+      informeTitulo: `Informe recorrida #${cod} ${new Date().toLocaleDateString()} ${
         finca?.nombreFinca
       } ${variedad?.nombreVariedad}`,
       finca: finca,
       usuarioRecorredor: user,
       variedad: variedad,
+      codInforme: cod
     });
     const informeComentario = getManager().create(InformeComentario, {
       descripcion: body.comentarioDescripcion,
@@ -327,6 +371,7 @@ informeRouter.get("/csvinformes", async (_req: Request, res: Response) => {
       .andWhere("cosechas.active = :active", { active: true })
       .select([
         "informe.uuid",
+        "informe.codInforme",
         "informe.informeTitulo",
         "informe.fechaIngreso",
         "informe.fechaRealCosecha",
@@ -340,7 +385,7 @@ informeRouter.get("/csvinformes", async (_req: Request, res: Response) => {
         "cosechas.fechaEstimadaCosecha",
         "productor.nombreProductor",
       ])
-      .orderBy("informe.fechaIngreso", "DESC")
+      .orderBy("informe.codInforme", "ASC")
       .getMany();
     console.log("informes", informes);
     if (informes.length === 0) {
@@ -349,6 +394,7 @@ informeRouter.get("/csvinformes", async (_req: Request, res: Response) => {
     let csvArray = [];
     for (let i = 0; i < informes.length; i++) {
       let informe = [];
+      informe.push(informes[i].codInforme);
       informe.push(informes[i].informeTitulo);
       informe.push(informes[i].fechaIngreso);
       informe.push(

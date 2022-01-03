@@ -5,10 +5,7 @@ import { Informe } from "./Informe";
 
 @Entity()
 export class Variedad extends Base {
-  @Column({ unique: true })
-  codVariedad: number;
-
-  @Column({ unique: true })
+  @Column()
   nombreVariedad: String;
 
   @OneToMany(() => Informe, (informe) => informe.variedad)

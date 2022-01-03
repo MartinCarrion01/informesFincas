@@ -1,5 +1,5 @@
 import { Express } from "express-serve-static-core";
-import { Productor} from "../../entities/Productor";
+import { Productor } from "../../entities/Productor";
 import supertest, { SuperTest } from "supertest";
 import { createServer } from "../../utils/server";
 import { ProductorTestHelper } from "./productorTestHelper";
@@ -22,16 +22,16 @@ beforeAll(async () => {
 beforeEach(async () => {
   await productorTestHelper.em.delete(Productor, {});
   productorTestHelper.initProductores();
-  await productorTestHelper.em.save(
-    productorTestHelper.productoresIniciales
-  );
+  await productorTestHelper.em.save(productorTestHelper.productoresIniciales);
 });
 
 describe("recuperar todas las productores", () => {
   test("si no hay nada, se devuelve un 404", async () => {
     await productorTestHelper.em.delete(Productor, {});
     const res = await api.get("/admin/productor").expect(404);
-    expect(res.body).toStrictEqual({ mensaje: "no se encontraron Productores" });
+    expect(res.body).toStrictEqual({
+      mensaje: "no se encontraron Productores",
+    });
   });
   test("devuelve notas", async () => {
     const res = await supertest(app)
@@ -56,7 +56,6 @@ describe("una productor es creada", () => {
   test("si ya existe una var con ese nombre, falla", async () => {
     const productor = productorTestHelper.em.create(Productor, {
       nombreProductor: "prod1",
-      codProductor: 4,
     });
     await api.post("/admin/productor").send(productor).expect(400);
     const productores = await productorTestHelper.productorAtDb();
@@ -67,7 +66,6 @@ describe("una productor es creada", () => {
   test("una productor se crea correctamente", async () => {
     const productor = productorTestHelper.em.create(Productor, {
       nombreProductor: "prod4",
-      codProductor: 4,
     });
     await api.post("/admin/productor").send(productor).expect(201);
     const productores = await productorTestHelper.productorAtDb();
@@ -92,7 +90,9 @@ describe("una productor es actualizada", () => {
   test("no se actualiza una productor no vigente", async () => {
     await productorTestHelper.expiredProductor();
     const productores = await productorTestHelper.productorAtDb();
-    const productor = productores.find((productor) => productor.codProductor === 3);
+    const productor = productores.find(
+      (productor) => productor.nombreProductor === "prod3"
+    );
     const updatedProductor = {
       ...productor,
       nombreProductor: "prod3new",
@@ -105,7 +105,9 @@ describe("una productor es actualizada", () => {
   });
   test("no se actualiza una productor si el nombre ya existe", async () => {
     const productores = await productorTestHelper.productorAtDb();
-    const productor = productores.find((productor) => productor.codProductor === 3);
+    const productor = productores.find(
+      (productor) => productor.nombreProductor === "prod3"
+    );
     const updatedProductor = {
       ...productor,
       nombreProductor: "prod1",
@@ -118,7 +120,9 @@ describe("una productor es actualizada", () => {
   });
   test("se actualiza una productor correctamente", async () => {
     const productores = await productorTestHelper.productorAtDb();
-    const productor = productores.find((productor) => productor.codProductor === 3);
+    const productor = productores.find(
+      (productor) => productor.nombreProductor === "prod3"
+    );
     const updatedProductor = {
       ...productor,
       nombreProductor: "prod3new",
@@ -140,7 +144,9 @@ describe("una productor es dada de baja", () => {
   test("una productor no vigente no se vuelve a dar de baja", async () => {
     await productorTestHelper.expiredProductor();
     const productores = await productorTestHelper.productorAtDb();
-    const productor = productores.find((productor) => productor.codProductor === 3);
+    const productor = productores.find(
+      (productor) => productor.nombreProductor === "prod3"
+    );
     await api
       .delete(`/admin/productor/${productor!.uuid}`)
       .send(productor)
@@ -148,12 +154,12 @@ describe("una productor es dada de baja", () => {
   });
   test("una productor es dada de baja", async () => {
     const productores = await productorTestHelper.productorAtDb();
-    const productor = productores.find((productor) => productor.codProductor === 3);
+    const productor = productores.find(
+      (productor) => productor.nombreProductor === "prod3"
+    );
     await api
       .delete(`/admin/productor/${productor!.uuid}`)
       .send(productor)
       .expect(204);
   });
 });
-
-

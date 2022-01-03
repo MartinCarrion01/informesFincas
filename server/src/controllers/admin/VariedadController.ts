@@ -29,7 +29,6 @@ variedadRouter.post("/variedad", async (req: Request, res: Response) => {
   try {
     const variedad = getManager().create(Variedad, {
       nombreVariedad: body.nombreVariedad,
-      codVariedad: body.codVariedad,
     });
     await getManager().save(variedad);
     return res.status(201).json(variedad);

@@ -4,10 +4,7 @@ import { Finca } from "./Finca";
 
 @Entity()
 export class Productor extends Base {
-  @Column({ unique: true })
-  codProductor: number;
-
-  @Column({ unique: true })
+  @Column()
   nombreProductor: String;
 
   @OneToMany(() => Finca, (finca) => finca.productor)

@@ -8,43 +8,35 @@ const userCommonRouter = express.Router();
 
 userCommonRouter.post("/login", async (req: Request, res: Response) => {
   const body = req.body;
-  const userReg = new RegExp("^[0-9]+$");
-  if (!userReg.test(body.dniUsuario)) {
-    return res
-      .status(400)
-      .json({ mensaje: "El dni no puede contener letras, solo números" });
-  }
   try {
-    const users = await getManager().find(User, {
+    const user = await getManager().findOne(User, {
       relations: ["rol"],
-      where: { dniUsuario: body.dniUsuario },
+      where: { userName: body.username },
     });
-    console.log('users', users)
-    if (users.length === 0) {
+    console.log("user", user);
+    if (!user) {
       return res
         .status(404)
         .json({ mensaje: "El usuario ingresado no existe" });
     }
-    for (let i = 0; i < users.length; i++) {
-      if (users[i].active) {
-        if (users[i].password !== "") {
-          const valid = await argon2.verify(users[i].password, body.password);
-          if (!valid) {
-            return res
-              .status(400)
-              .json({ mensaje: "La contraseña ingresada no es correcta" });
-          }
-        } else {
-          if (body.password.trim() !== "") {
-            return res
-              .status(400)
-              .json({ mensaje: "La contraseña ingresada no es correcta" });
-          }
+    if (user.active) {
+      if (user.password !== "") {
+        const valid = await argon2.verify(user.password, body.password);
+        if (!valid) {
+          return res
+            .status(400)
+            .json({ mensaje: "La contraseña ingresada no es correcta" });
         }
-        (req.session as any).userUuid = users[i].uuid;
-        (req.session as any).userRole = users[i].rol.nombreUserRole;
-        return res.status(200).json(users[i]);
+      } else {
+        if (body.password.trim() !== "") {
+          return res
+            .status(400)
+            .json({ mensaje: "La contraseña ingresada no es correcta" });
+        }
       }
+      (req.session as any).userUuid = user.uuid;
+      (req.session as any).userRole = user.rol.nombreUserRole;
+      return res.status(200).json(user);
     }
     return res.status(400).json({
       mensaje:
@@ -54,6 +46,48 @@ userCommonRouter.post("/login", async (req: Request, res: Response) => {
     return res.status(400).json({ error });
   }
 });
+
+userCommonRouter.post(
+  "/changepassword",
+  auth,
+  async (req: Request, res: Response) => {
+    const body = req.body;
+    try {
+      const user = await getManager().findOne(User, {
+        where: { uuid: (req.session as any).userUuid },
+        relations: ["rol"],
+      });
+      if (!user) {
+        return res.status(404).json({
+          mensaje:
+            "no existe el usuario al cual le desea cambiar la contraseña",
+        });
+      }
+      const valid = await argon2.verify(user.password, body.oldpassword);
+      if (!valid) {
+        return res
+          .status(400)
+          .json({ mensaje: "La contraseña anterior ingresada no es correcta" });
+      }
+      if(body.password.trim() === ""){
+        return res
+          .status(400)
+          .json({ mensaje: "La contraseña nueva no puede ser vacía" });
+      }
+      if(body.password.trim().length < 6){
+        return res
+          .status(400)
+          .json({ mensaje: "La contraseña nueva no puede tener una longitud menor a 6 caracteres" });
+      }
+      user.password = await argon2.hash(body.password);
+      await getManager().save(user);
+      return res.status(200).json(user);
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json({ error });
+    }
+  }
+);
 
 userCommonRouter.post("/logout", auth, async (req: Request, res: Response) => {
   req.session.destroy((error) => {

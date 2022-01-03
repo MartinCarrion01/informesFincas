@@ -50,6 +50,92 @@ informeAdminRouter.delete(
   }
 );
 
+informeAdminRouter.get(
+  "/simpleinforme/:id",
+  async (req: Request, res: Response) => {
+    const idInforme = req.params.id;
+    try {
+      const informe = await getManager()
+        .createQueryBuilder(Informe, "informe")
+        .leftJoinAndSelect("informe.informeCosechasEstimadas", "cosechas")
+        .where("informe.uuid = :uuid", { uuid: idInforme })
+        .andWhere("cosechas.active = :active", { active: true })
+        .select([
+          "informe.uuid",
+          "informe.informeTitulo",
+          "informe.fechaRealCosecha",
+          "informe.active",
+          "cosechas.cantKgEstimadoCosecha",
+          "cosechas.fechaEstimadaCosecha",
+        ])
+        .getOne();
+      if (!informe) {
+        return res
+          .status(404)
+          .json({ mensaje: "No existe el informe que desea modificar" });
+      }
+      if (!informe.active) {
+        return res
+          .status(400)
+          .json({ mensaje: "El informe que desea modificar fue dado de baja" });
+      }
+      if (informe.fechaRealCosecha) {
+        return res.status(400).json({
+          mensaje:
+            "No se puede modificar un informe donde la cosecha ya fue realizada",
+        });
+      }
+      return res.status(200).json(informe);
+    } catch (error) {
+      return res.status(400).json({ mensaje: JSON.stringify(error) });
+    }
+  }
+);
+
+informeAdminRouter.put("/informe/:id", async(req: Request, res: Response) => {
+  const body = req.body;
+  const idInforme = req.params.id;
+
+  try {
+    const informe = await getManager()
+      .createQueryBuilder(Informe, "informe")
+      .leftJoinAndSelect("informe.informeCosechasEstimadas", "cosechas")
+      .where("informe.uuid = :uuid", { uuid: idInforme })
+      .andWhere("cosechas.active = :active", { active: true })
+      .select([
+        "informe.uuid",
+        "informe.informeTitulo",
+        "informe.fechaRealCosecha",
+        "informe.active",
+        "cosechas.cantKgEstimadoCosecha",
+        "cosechas.fechaEstimadaCosecha",
+      ])
+      .getOne();
+    if (!informe) {
+      return res
+        .status(404)
+        .json({ mensaje: "No existe el informe que desea modificar" });
+    }
+    if (!informe.active) {
+      return res
+        .status(400)
+        .json({ mensaje: "El informe que desea modificar fue dado de baja" });
+    }
+    if (informe.fechaRealCosecha) {
+      return res.status(400).json({
+        mensaje:
+          "No se puede modificar un informe donde la cosecha ya fue realizada",
+      });
+    }
+    informe.informeCosechasEstimadas[0].fechaEstimadaCosecha = body.fechaEstimadaCosecha;
+    informe.informeCosechasEstimadas[0].cantKgEstimadoCosecha = body.cantKgEstimadoCosecha;
+    await getManager().save(informe);
+    return res.status(200).json(informe);
+  } catch (error) {
+    return res.status(400).json({ mensaje: JSON.stringify(error) });
+  }
+})
+
 informeAdminRouter.put(
   "/informe/:id/:comentarioId",
   async (req: Request, res: Response) => {
@@ -57,7 +143,10 @@ informeAdminRouter.put(
     const idInforme = req.params.id;
     const idComentario = req.params.comentarioId;
     try {
-      const informe = await getManager().findOne(Informe, {where: {uuid: idInforme}, relations: ['informeComentarios']})
+      const informe = await getManager().findOne(Informe, {
+        where: { uuid: idInforme },
+        relations: ["informeComentarios"],
+      });
       if (!informe) {
         return res
           .status(404)

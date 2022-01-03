@@ -9,13 +9,13 @@ export class ProductorTestHelper {
   }
   initProductores() {
     this.productoresIniciales = [
-      this.em.create(Productor, { nombreProductor: "prod1", codProductor: 1 }),
-      this.em.create(Productor, { nombreProductor: "prod2", codProductor: 2 }),
-      this.em.create(Productor, { nombreProductor: "prod3", codProductor: 3 }),
+      this.em.create(Productor, { nombreProductor: "prod1" }),
+      this.em.create(Productor, { nombreProductor: "prod2"}),
+      this.em.create(Productor, { nombreProductor: "prod3"}),
     ];
   }
   async expiredProductor() {
-    const productor = await this.em.findOne(Productor, { codProductor: 3 });
+    const productor = await this.em.findOne(Productor, { nombreProductor: "prod3" });
     if (productor) {
       productor.active = false;
       await this.em.save(productor);
