@@ -48,8 +48,6 @@ export const EditarEliminarInforme = () => {
     );
   }
 
-  console.log("error", error, "informe", informe);
-
   return (
     <Container maxW="6xl" centerContent>
       <Box bg="gray.50" p={10} mt={8} borderRadius={10} maxW={"3xl"}>

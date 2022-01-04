@@ -18,18 +18,14 @@ export const ComentarioInforme = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  console.log(params.id);
-
   useEffect(() => {
     document.title = "Cargar nuevo comentario - Informes Fincas";
     const valid = async () => {
       try {
-        console.log("after req");
         const res = await axios.get(
           "http://localhost:3001/api/v1/validateinforme/" + params.id,
           { withCredentials: true }
         );
-        console.log(res);
         if (res.status === 200) {
           setLoading(false);
         }

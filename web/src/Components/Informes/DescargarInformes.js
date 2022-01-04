@@ -29,7 +29,6 @@ export const DescargarInformes = () => {
           "cantKgRealCosecha",
         ];
         const csv = [header, ...res.data];
-        console.log(csv);
         setInformesToDownload(csv);
         setLoading(false);
       } catch (error) {

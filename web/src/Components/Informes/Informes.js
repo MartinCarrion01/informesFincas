@@ -69,7 +69,6 @@ const Informes = ({
             new Date(informe.informeCosechasEstimadas[0].fechaEstimadaCosecha)
           ).isBetween(fechaDesde, fechaHasta, null, "[]")
       );
-      console.log(filtered);
       return filtered;
     }
     if (fechaDesde && !fechaHasta) {
@@ -80,7 +79,6 @@ const Informes = ({
             new Date(informe.informeCosechasEstimadas[0].fechaEstimadaCosecha)
           ).isSameOrAfter(fechaDesde)
       );
-      console.log(filtered);
       return filtered;
     }
     if (fechaHasta && !fechaDesde) {
@@ -91,7 +89,6 @@ const Informes = ({
             new Date(informe.informeCosechasEstimadas[0].fechaEstimadaCosecha)
           ).isSameOrBefore(fechaHasta)
       );
-      console.log(filtered);
       return filtered;
     }
     return informes;
@@ -99,7 +96,6 @@ const Informes = ({
 
   const filteredInformes = () => {
     let informesFiltrados = informes;
-    console.log(productor)
     informesFiltrados =
       productor === ""
         ? informesFiltrados
@@ -119,12 +115,10 @@ const Informes = ({
             informe.variedad.nombreVariedad.includes(variedad)
           );
     informesFiltrados = dateChecker(informesFiltrados);
-    console.log(informesFiltrados);
     return informesFiltrados;
   };
 
   const showInformes = (informesToShow) => {
-    console.log(informesToShow);
     if (informesToShow.length === 0) {
       return (
         <Alert status="error">

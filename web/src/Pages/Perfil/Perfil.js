@@ -18,8 +18,6 @@ const Perfil = () => {
   const [fechaHastaFilter, setFechaHastaFilter] = useState("");
   const [showFilter, setShowFilter] = useState(false);
 
-  console.log(productorFilter);
-
   const navigate = useNavigate();
   useEffect(() => {
     document.title = "Mis informes - Informes Fincas";

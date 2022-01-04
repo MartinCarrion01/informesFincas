@@ -1,4 +1,7 @@
 import {
+  Alert,
+  AlertIcon,
+  AlertTitle,
   Box,
   Button,
   FormControl,
@@ -19,16 +22,15 @@ import { SeCosecho } from "./SeCosecho";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-export const ComentarioForm = ({informeId}) => {
+export const ComentarioForm = ({ informeId }) => {
   const [seCosecho, setSeCosecho] = useState("");
   const [cant, setCant] = useState(0);
   const [fecha, setFecha] = useState(new Date());
   const [commentInput, setCommentInput] = useState("");
   const commentError = commentInput.length === 0 || commentInput.length > 300;
   const navigate = useNavigate();
+  const [error, setError] = useState(null)
 
-
-  console.log("se cosecho", cant, fecha);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -53,10 +55,9 @@ export const ComentarioForm = ({informeId}) => {
         comment,
         { withCredentials: true }
       );
-      console.log("res", res.status);
       navigate(`/informe/${informeId.id}`);
     } catch (error) {
-      console.log(error.response)
+      setError(JSON.stringify(error.response.data));
     }
   };
 
@@ -70,6 +71,18 @@ export const ComentarioForm = ({informeId}) => {
             align="stretch"
             maxW="3xl"
           >
+            {error ? (
+              <Alert
+                status="error"
+                p={4}
+                borderWidth="1px"
+                borderRadius="lg"
+                mt={5}
+              >
+                <AlertIcon />
+                <AlertTitle mr={2}>{error}</AlertTitle>
+              </Alert>
+            ) : null}
             <Box px={[4, 0]}>
               <Heading fontSize="lg" fontWeight="md" lineHeight="6">
                 Crear un comentario sobre última recorrida

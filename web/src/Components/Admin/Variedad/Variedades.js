@@ -21,8 +21,6 @@ export const Variedades = ({ variedades, update }) => {
   const [variedadToDelete, setVariedadToDelete] = useState(null);
   const { isOpen, onOpen, onClose } = useModalClose();
 
-  console.log(variedadToDelete, variedadToEdit);
-
   return !variedades ? null : (
     <>
       {variedadToEdit ? (

@@ -43,8 +43,6 @@ export function InformeForm({ fincas, variedades, productores }) {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  console.log(dateInput)
-
   const fincasByProd = fincas.filter(
     (finca) => finca.productor.uuid === productorInput
   );
@@ -63,14 +61,12 @@ export function InformeForm({ fincas, variedades, productores }) {
       fechaEstimadaCosecha: dateInput.toISOString().slice(0, 10),
       comentarioDescripcion: commentInput,
     };
-    console.log(newInforme);
     try {
       const res = await axios.post(
         "http://localhost:3001/api/v1/informe",
         newInforme,
         { withCredentials: true }
       );
-      console.log("res", res.status);
       navigate(`/informe/${res.data.uuid}`);
     } catch (error) {
       if (error.response.status === 400) {

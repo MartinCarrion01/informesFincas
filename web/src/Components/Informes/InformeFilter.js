@@ -1,4 +1,7 @@
 import {
+  Alert,
+  AlertIcon,
+  AlertTitle,
   Box,
   Container,
   Flex,
@@ -14,7 +17,13 @@ import React, { useEffect, useState } from "react";
 import frLocale from "date-fns/locale/es";
 import axios from "axios";
 
-export const InformeFilter = ({ setFinca, setVariedad, setProductor, setFd, setFh }) => {
+export const InformeFilter = ({
+  setFinca,
+  setVariedad,
+  setProductor,
+  setFd,
+  setFh,
+}) => {
   const [fincas, setFincas] = useState(null);
   const [variedades, setVariedades] = useState(null);
   const [productores, setProductores] = useState(null);
@@ -41,81 +50,106 @@ export const InformeFilter = ({ setFinca, setVariedad, setProductor, setFd, setF
     getData();
   }, []);
 
-  console.log(productores);
-
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns} locale={frLocale}>
-      <Container maxW="container.xl">
-        <SimpleGrid columns={[2, null, 3]} spacing="40px" mt={5}>
-          <Select
-            placeholder="Productor"
-            disabled={loading}
-            onChange={(e) => setProductor(e.target.value)}
+    <>
+      {error ? (
+        <Container maxW="container.xl" centerContent>
+          <Alert
+            status="error"
+            p={4}
+            borderWidth="1px"
+            borderRadius="lg"
+            mt={5}
           >
-              {loading
-              ? null
-              : productores.map((productor) => (
-                  <option key={productor.uuid} value={productor.nombreProductor}>
-                    {productor.nombreProductor}
-                  </option>
-                ))}
-          </Select>
-          <Select
-            placeholder="Finca"
-            disabled={loading}
-            onChange={(e) => setFinca(e.target.value)}
-          >
-            {loading
-              ? null
-              : fincas.map((finca) => (
-                  <option key={finca.uuid} value={finca.nombreFinca}>
-                    {finca.nombreFinca}
-                  </option>
-                ))}
-          </Select>
-          <Select
-            placeholder="Variedad"
-            disabled={loading}
-            onChange={(e) => setVariedad(e.target.value)}
-          >
-            {loading
-              ? null
-              : variedades.map((variedad) => (
-                  <option key={variedad.uuid} value={variedad.nombreVariedad}>
-                    {variedad.nombreVariedad}
-                  </option>
-                ))}
-            <option value={"Inexistente"}>Inexistente</option>
-          </Select>
-        </SimpleGrid>
-        <Flex py={[0, 10, 20]} direction={{ base: "column", md: "row" }} mt={5}>
-          <Box>
-            <DatePicker
-              label="Fecha estimada desde"
-              mask="__/__/____"
-              value={setFd.fechaDesdeFilter}
-              disabled={loading}
-              onChange={(newValue) => {
-                setFd.setFechaDesdeFilter(newValue);
-              }}
-              renderInput={(params) => <TextField {...params} />}
-            />
-          </Box>
-          <Spacer />
-          <Box>
-            <DatePicker
-              label="Fecha estimada hasta"
-              mask="__/__/____"
-              value={setFh.fechaHastaFilter}
-              disabled={loading}
-              onChange={(newValue) => {
-                setFh.setFechaHastaFilter(newValue);
-              }}
-              renderInput={(params) => <TextField {...params} />}
-            />
-          </Box>
-        </Flex>
-      </Container>
-    </LocalizationProvider>
+            <AlertIcon />
+            <AlertTitle mr={2}>{error}</AlertTitle>
+          </Alert>
+        </Container>
+      ) : (
+        <LocalizationProvider dateAdapter={AdapterDateFns} locale={frLocale}>
+          <Container maxW="container.xl">
+            <SimpleGrid columns={[2, null, 3]} spacing="40px" mt={5}>
+              <Select
+                placeholder="Productor"
+                disabled={loading}
+                onChange={(e) => setProductor(e.target.value)}
+              >
+                {loading
+                  ? null
+                  : productores.map((productor) => (
+                      <option
+                        key={productor.uuid}
+                        value={productor.nombreProductor}
+                      >
+                        {productor.nombreProductor}
+                      </option>
+                    ))}
+              </Select>
+              <Select
+                placeholder="Finca"
+                disabled={loading}
+                onChange={(e) => setFinca(e.target.value)}
+              >
+                {loading
+                  ? null
+                  : fincas.map((finca) => (
+                      <option key={finca.uuid} value={finca.nombreFinca}>
+                        {finca.nombreFinca}
+                      </option>
+                    ))}
+              </Select>
+              <Select
+                placeholder="Variedad"
+                disabled={loading}
+                onChange={(e) => setVariedad(e.target.value)}
+              >
+                {loading
+                  ? null
+                  : variedades.map((variedad) => (
+                      <option
+                        key={variedad.uuid}
+                        value={variedad.nombreVariedad}
+                      >
+                        {variedad.nombreVariedad}
+                      </option>
+                    ))}
+                <option value={"Inexistente"}>Inexistente</option>
+              </Select>
+            </SimpleGrid>
+            <Flex
+              py={[0, 10, 20]}
+              direction={{ base: "column", md: "row" }}
+              mt={5}
+            >
+              <Box>
+                <DatePicker
+                  label="Fecha estimada desde"
+                  mask="__/__/____"
+                  value={setFd.fechaDesdeFilter}
+                  disabled={loading}
+                  onChange={(newValue) => {
+                    setFd.setFechaDesdeFilter(newValue);
+                  }}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </Box>
+              <Spacer />
+              <Box>
+                <DatePicker
+                  label="Fecha estimada hasta"
+                  mask="__/__/____"
+                  value={setFh.fechaHastaFilter}
+                  disabled={loading}
+                  onChange={(newValue) => {
+                    setFh.setFechaHastaFilter(newValue);
+                  }}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </Box>
+            </Flex>
+          </Container>
+        </LocalizationProvider>
+      )}
+    </>
   );
 };

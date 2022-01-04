@@ -52,7 +52,6 @@ const Login = ({ login }) => {
                 username: values.username,
                 password: values.password,
               };
-              console.log(body);
               try {
                 const res = await axios.post(
                   "http://localhost:3001/api/v1/login",

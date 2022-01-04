@@ -25,8 +25,6 @@ export const Productor = () => {
     return <Loading />;
   }
 
-  console.log(error);
-
   return (
     <Container maxW="6xl" centerContent>
       {error ? (
