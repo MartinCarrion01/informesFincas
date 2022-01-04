@@ -4,7 +4,7 @@ import productorRouter from "../controllers/admin/ProductorController";
 import variedadRouter from "../controllers/admin/VariedadController";
 import userRoleRouter from "../controllers/admin/UserRoleController";
 import fincaRouter from "../controllers/admin/FincaController";
-import { Connection, createConnection} from "typeorm";
+import { Connection, createConnection } from "typeorm";
 import userAdminRouter from "../controllers/admin/UserAdminController";
 import userCommonRouter from "../controllers/common/UserCommonController";
 import informeCommonRouter from "../controllers/common/InformeCommonController";
@@ -17,16 +17,43 @@ import cors from "cors";
 import { authorize } from "../middleware/authorize";
 
 export async function createServer() {
-  const connection: Connection = await createConnection();
+  let intentos = 20;
 
-  console.log("is connected:", connection.isConnected);
+  while (intentos) {
+    try {
+      const connection: Connection = await createConnection({
+        type: "mysql",
+        host: process.env.DB_HOST || "localhost",
+        username: "root",
+        password: "password",
+        database: "informesfincas",
+        logging: true,
+        synchronize: false,
+        entities: ["dist/entities/**/*.js"],
+        migrationsTableName: "migrations_typeorm",
+        migrations: ["dist/migrations/**/*.js"],
+        cli: {
+          entitiesDir: "dist/entities",
+          migrationsDir: "dist/migrations",
+        },
+      });
+      await connection.runMigrations();
+
+      console.log("is connected:", connection.isConnected);
+      break;
+    } catch (error) {
+      console.log(error);
+      intentos -= 1;
+      await new Promise((res) => setTimeout(res, 5000));
+    }
+  }
 
   const app = express();
   app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 
   const RedisStore = connectRedis(session);
-  const redisClient = redis.createClient();
-
+  const redisClient = redis.createClient({host: process.env.REDIS_HOST || '127.0.0.1', port: 6379});
+  app.set("proxy", 1);
   app.use(
     session({
       name: "qid",
