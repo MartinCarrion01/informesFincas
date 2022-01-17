@@ -49,11 +49,11 @@ export async function createServer() {
   }
 
   const app = express();
-  app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+  app.use(cors({ origin: "https://192.168.1.156:3000", credentials: true }));
 
   const RedisStore = connectRedis(session);
   const redisClient = redis.createClient({host: process.env.REDIS_HOST || '127.0.0.1', port: 6379});
-  app.set("proxy", 1);
+  app.set("trust proxy", 1);
   app.use(
     session({
       name: "qid",
@@ -64,7 +64,7 @@ export async function createServer() {
       cookie: {
         maxAge: 1000 * 60 * 60 * 24,
         httpOnly: true,
-        secure: false,
+        secure: true,
         sameSite: "lax",
       },
     })

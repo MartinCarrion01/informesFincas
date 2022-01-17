@@ -4,7 +4,7 @@ services:
   app:
     image: martincarrion01/informesfincas:1
     ports: 
-      - "8080:8080"
+      - "3001:8080"
     depends_on:
       - db
     environment:
@@ -17,7 +17,7 @@ services:
       - MYSQL_DATABASE=informesfincas
       - MYSQL_ROOT_PASSWORD=password
     ports: 
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - db:/var/lib/mysql
   redis:
