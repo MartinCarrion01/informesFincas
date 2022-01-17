@@ -55,6 +55,7 @@ export const ComentarioForm = ({ informeId }) => {
         comment,
         { withCredentials: true }
       );
+      console.log(res);
       navigate(`/informe/${informeId.id}`);
     } catch (error) {
       setError(JSON.stringify(error.response.data));
