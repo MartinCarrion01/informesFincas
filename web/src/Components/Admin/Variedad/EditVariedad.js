@@ -45,7 +45,7 @@ export const EditVariedad = ({
           nombreVariedad: nombreInput,
         };
         const res = await axios.put(
-          "http://localhost:3001/api/v1/admin/variedad/" + variedad.uuid,
+          "http://192.168.4.165:3001/api/v1/admin/variedad/" + variedad.uuid,
           body,
           { withCredentials: true }
         );

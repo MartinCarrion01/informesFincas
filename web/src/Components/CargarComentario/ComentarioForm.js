@@ -51,7 +51,7 @@ export const ComentarioForm = ({ informeId }) => {
     }
     try {
       const res = await axios.post(
-        `http://localhost:3001/api/v1/informe/${informeId.id}`,
+        `http://192.168.4.165:3001/api/v1/informe/${informeId.id}`,
         comment,
         { withCredentials: true }
       );

@@ -23,7 +23,7 @@ export const ComentarioInforme = () => {
     const valid = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:3001/api/v1/validateinforme/" + params.id,
+          "http://192.168.4.165:3001/api/v1/validateinforme/" + params.id,
           { withCredentials: true }
         );
         if (res.status === 200) {

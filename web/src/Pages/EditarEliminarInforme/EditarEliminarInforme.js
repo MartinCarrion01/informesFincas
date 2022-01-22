@@ -18,7 +18,7 @@ export const EditarEliminarInforme = () => {
     const getInforme = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:3001/api/v1/admin/simpleinforme/${params.id}`,
+          `http://192.168.4.165:3001/api/v1/admin/simpleinforme/${params.id}`,
           { withCredentials: true }
         );
         setInforme(res.data);

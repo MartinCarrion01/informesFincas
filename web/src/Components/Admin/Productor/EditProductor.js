@@ -45,7 +45,7 @@ export const EditProductor = ({
           nombreProductor: nombreInput,
         };
         const res = await axios.put(
-          "http://localhost:3001/api/v1/admin/productor/" + productor.uuid,
+          "http://192.168.4.165:3001/api/v1/admin/productor/" + productor.uuid,
           body,
           { withCredentials: true }
         );

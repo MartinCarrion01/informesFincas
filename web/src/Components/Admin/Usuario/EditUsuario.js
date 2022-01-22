@@ -51,7 +51,7 @@ export const EditUsuario = ({
     const getRoles = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:3001/api/v1/admin/userrole",
+          "http://192.168.4.165:3001/api/v1/admin/userrole",
           { withCredentials: true }
         );
         const recorredor = res.data.find(
@@ -92,7 +92,7 @@ export const EditUsuario = ({
           userRoleUuid: seraAdmin === "si" ? rol.uuid : "",
         };
         const res = await axios.put(
-          "http://localhost:3001/api/v1/admin/user/" + usuario.uuid,
+          "http://192.168.4.165:3001/api/v1/admin/user/" + usuario.uuid,
           body,
           { withCredentials: true }
         );

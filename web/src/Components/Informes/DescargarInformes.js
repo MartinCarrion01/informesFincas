@@ -12,7 +12,7 @@ export const DescargarInformes = () => {
   useEffect(() => {
     const getInformes = async () => {
       try {
-        const res = await axios.get("http://localhost:3001/api/v1/csvinformes", {
+        const res = await axios.get("http://192.168.4.165:3001/api/v1/csvinformes", {
           withCredentials: true,
         });
         const header = [

@@ -35,7 +35,7 @@ import {
     const handleEliminar = async () => {
       try {
         const res = await axios.delete(
-          `http://localhost:3001/api/v1/admin/finca/${finca.uuid}`,
+          `http://192.168.4.165:3001/api/v1/admin/finca/${finca.uuid}`,
           { withCredentials: true }
         );
         if (res.status === 204) {

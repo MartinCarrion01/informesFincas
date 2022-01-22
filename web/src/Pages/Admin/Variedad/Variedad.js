@@ -17,7 +17,7 @@ export const Variedad = () => {
     document.title = "Variedades - Informes Fincas";
   }, []);
   const { data, error, loading, update } = useFetch(
-    "http://localhost:3001/api/v1/admin/variedad"
+    "http://192.168.4.165:3001/api/v1/admin/variedad"
   );
   const { isOpen, onOpen, onClose } = useDisclosure();
 

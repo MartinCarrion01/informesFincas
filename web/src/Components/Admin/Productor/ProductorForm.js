@@ -33,7 +33,7 @@ import { useNavigate } from "react-router-dom";
           nombreProductor: nombreInput,
         };
         const res = await axios.post(
-          "http://localhost:3001/api/v1/admin/productor",
+          "http://192.168.4.165:3001/api/v1/admin/productor",
           body,
           { withCredentials: true }
         );

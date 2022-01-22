@@ -17,7 +17,7 @@ export const Finca = () => {
     document.title = "Fincas - Informes Fincas";
   }, []);
   const { data, error, loading, update } = useFetch(
-    "http://localhost:3001/api/v1/admin/finca"
+    "http://192.168.4.165:3001/api/v1/admin/finca"
   );
   const { isOpen, onOpen, onClose } = useDisclosure();
 

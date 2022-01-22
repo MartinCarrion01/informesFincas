@@ -48,7 +48,7 @@ export const EditEncargadoFinca = ({
           numeroEncargadoFinca: numeroInput,
         };
         const res = await axios.put(
-          "http://localhost:3001/api/v1/admin/encargadofinca/" + encargadoFinca.uuid,
+          "http://192.168.4.165:3001/api/v1/admin/encargadofinca/" + encargadoFinca.uuid,
           body,
           { withCredentials: true }
         );

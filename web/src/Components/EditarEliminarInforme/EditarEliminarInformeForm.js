@@ -56,7 +56,7 @@ export const EditarEliminarInformeForm = ({ informe, setInforme }) => {
     };
     try {
       const res = await axios.put(
-        `http://localhost:3001/api/v1/admin/informe/${informe.uuid}`,
+        `http://192.168.4.165:3001/api/v1/admin/informe/${informe.uuid}`,
         body,
         { withCredentials: true }
       );
@@ -69,7 +69,7 @@ export const EditarEliminarInformeForm = ({ informe, setInforme }) => {
     e.preventDefault();
     try {
       await axios.delete(
-        `http://localhost:3001/api/v1/admin/informe/${informe.uuid}`,
+        `http://192.168.4.165:3001/api/v1/admin/informe/${informe.uuid}`,
         { withCredentials: true }
       );
       navigate(`/`);

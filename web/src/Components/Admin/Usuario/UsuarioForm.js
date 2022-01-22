@@ -36,7 +36,7 @@ export const UsuarioForm = ({ isOpen, onClose, update }) => {
     const getRoles = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:3001/api/v1/admin/userrole",
+          "http://192.168.4.165:3001/api/v1/admin/userrole",
           { withCredentials: true }
         );
         const recorredor = res.data.find(
@@ -76,7 +76,7 @@ export const UsuarioForm = ({ isOpen, onClose, update }) => {
         userRoleUuid: rol.uuid,
       };
       const res = await axios.post(
-        "http://localhost:3001/api/v1/admin/user/register",
+        "http://192.168.4.165:3001/api/v1/admin/user/register",
         body,
         { withCredentials: true }
       );

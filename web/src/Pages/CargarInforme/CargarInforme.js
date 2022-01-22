@@ -20,7 +20,7 @@ export const CargarInforme = () => {
     document.title = "Cargar nuevo informe - Informes Fincas";
     const getData = async () => {
       try {
-        const res = await axios.get("http://localhost:3001/api/v1/data", {
+        const res = await axios.get("http://192.168.4.165:3001/api/v1/data", {
           withCredentials: true,
         });
         setFincas(res.data.fincas);

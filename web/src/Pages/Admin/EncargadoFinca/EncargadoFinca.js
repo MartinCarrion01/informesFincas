@@ -17,7 +17,7 @@ export const EncargadoFinca = () => {
     document.title = "Encargados de finca - Informes Fincas";
   }, []);
   const { data, error, loading, update } = useFetch(
-    "http://localhost:3001/api/v1/admin/encargadofinca"
+    "http://192.168.4.165:3001/api/v1/admin/encargadofinca"
   );
   const { isOpen, onOpen, onClose } = useDisclosure();
 

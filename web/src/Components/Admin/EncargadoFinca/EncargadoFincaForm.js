@@ -34,7 +34,7 @@ export const EncargadoFincaForm = ({ isOpen, onClose, update }) => {
         numeroEncargadoFinca: numeroInput,
       };
       const res = await axios.post(
-        "http://localhost:3001/api/v1/admin/encargadofinca",
+        "http://192.168.4.165:3001/api/v1/admin/encargadofinca",
         body,
         { withCredentials: true }
       );

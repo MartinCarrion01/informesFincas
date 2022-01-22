@@ -37,7 +37,7 @@ export const FincaForm = ({ isOpen, onClose, update }) => {
     loading,
     setData,
     setError: setFetchError,
-  } = useFetchSet("http://localhost:3001/api/v1/admin/newfincadata");
+  } = useFetchSet("http://192.168.4.165:3001/api/v1/admin/newfincadata");
 
   useEffect(() => {
     return () => {
@@ -85,7 +85,7 @@ export const FincaForm = ({ isOpen, onClose, update }) => {
                     variedades: values.variedad,
                   };
                   const res = await axios.post(
-                    "http://localhost:3001/api/v1/admin/finca",
+                    "http://192.168.4.165:3001/api/v1/admin/finca",
                     body,
                     {
                       withCredentials: true,

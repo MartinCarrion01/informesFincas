@@ -63,7 +63,7 @@ export function InformeForm({ fincas, variedades, productores }) {
     };
     try {
       const res = await axios.post(
-        "http://localhost:3001/api/v1/informe",
+        "http://192.168.4.165:3001/api/v1/informe",
         newInforme,
         { withCredentials: true }
       );

@@ -35,7 +35,7 @@ export const EditFinca = ({ isOpen, onClose, update, finca, setFinca }) => {
     loading,
     setData,
     setError: setFetchError,
-  } = useFetchSet("http://localhost:3001/api/v1/admin/newfincadata");
+  } = useFetchSet("http://192.168.4.165:3001/api/v1/admin/newfincadata");
 
   useEffect(() => {
     if (!finca) return;
@@ -85,7 +85,7 @@ export const EditFinca = ({ isOpen, onClose, update, finca, setFinca }) => {
                     variedades: values.variedad,
                   };
                   const res = await axios.put(
-                    "http://localhost:3001/api/v1/admin/finca/" + finca.uuid,
+                    "http://192.168.4.165:3001/api/v1/admin/finca/" + finca.uuid,
                     body,
                     {
                       withCredentials: true,

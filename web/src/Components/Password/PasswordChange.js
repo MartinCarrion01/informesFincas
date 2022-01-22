@@ -37,7 +37,7 @@ export const PasswordChange = ({ changePassword }) => {
     const body = { password: passwordInput, oldpassword: oldInput };
     try {
       const res = await axios.post(
-        `http://localhost:3001/api/v1/changepassword`,
+        `http://192.168.4.165:3001/api/v1/changepassword`,
         body,
         { withCredentials: true }
       );

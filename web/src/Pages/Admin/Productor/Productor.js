@@ -17,7 +17,7 @@ export const Productor = () => {
     document.title = "Productores - Informes Fincas";
   }, []);
   const { data, error, loading, update } = useFetch(
-    "http://localhost:3001/api/v1/admin/productor"
+    "http://192.168.4.165:3001/api/v1/admin/productor"
   );
   const { isOpen, onOpen, onClose } = useDisclosure();
 

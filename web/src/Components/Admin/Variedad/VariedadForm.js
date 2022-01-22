@@ -33,7 +33,7 @@ export const VariedadForm = ({ isOpen, onClose, update }) => {
         nombreVariedad: nombreInput,
       };
       const res = await axios.post(
-        "http://localhost:3001/api/v1/admin/variedad",
+        "http://192.168.4.165:3001/api/v1/admin/variedad",
         body,
         { withCredentials: true }
       );
